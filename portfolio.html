@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Maya — Portfolio</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body data-page="portfolio">
+  <header class="topbar">
+    <div class="brand small">Maya</div>
+    <nav class="nav">
+      <a href="/dashboard.html">Dashboard</a>
+      <a href="/portfolio.html" class="active">Portfolio</a>
+      <a href="/credit-cards.html">Credit Cards</a>
+      <button id="logoutBtn" class="btn ghost pill">Logout</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <div class="row between">
+        <h2>Your Stocks</h2>
+        <button class="btn primary pill" id="addStock">Add Stock</button>
+      </div>
+      <div id="portfolioList" class="list"></div>
+    </section>
+  </main>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>

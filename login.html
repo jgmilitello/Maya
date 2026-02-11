@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Maya — Login</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body data-page="login">
+  <main class="centered-layout">
+    <section class="card login-card">
+      <h1 class="brand">Maya</h1>
+      <p class="subtitle">A friendly place to learn your money 💖</p>
+
+      <form id="loginForm" class="form">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" placeholder="Choose a nickname" required>
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="At least 6 characters" required>
+
+        <button class="btn primary pill" type="submit">Log in</button>
+      </form>
+
+      <p class="muted">No real account needed — this is a demo using mock data.</p>
+    </section>
+  </main>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
