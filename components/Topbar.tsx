@@ -12,7 +12,7 @@ export default function Topbar() {
         <Link href="/dashboard" className={pathname === '/dashboard' ? 'active' : ''}>Dashboard</Link>
         <Link href="/portfolio" className={pathname === '/portfolio' ? 'active' : ''}>Portfolio</Link>
         <Link href="/credit-cards" className={pathname === '/credit-cards' ? 'active' : ''}>Credit Cards</Link>
-        <button className="btn ghost pill" onClick={logoutUser}>Logout</button>
+        <button className="btn ghost pill" onClick={() => void logoutUser()}>Logout</button>
       </nav>
     </header>
   );

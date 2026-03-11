@@ -1,25 +1,38 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { mockLogin } from '@/lib/api';
 import { setCurrentUser } from '@/lib/auth';
 
 export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
     const username = (form.elements.namedItem('username') as HTMLInputElement).value.trim();
     const password = (form.elements.namedItem('password') as HTMLInputElement).value;
-    try {
-      const res = await mockLogin(username, password);
-      setCurrentUser(res.user);
-      router.push('/dashboard');
-    } catch (err) {
-      setError((err as Error).message);
+
+    setLoading(true);
+    setError('');
+
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+
+    const data = await res.json();
+    setLoading(false);
+
+    if (!res.ok) {
+      setError(data.error ?? 'Login failed');
+      return;
     }
+
+    setCurrentUser(data.user);
+    router.push('/dashboard');
   }
 
   return (
@@ -37,10 +50,12 @@ export default function LoginPage() {
 
           {error && <p className="muted" style={{ color: '#c0392b' }}>{error}</p>}
 
-          <button className="btn primary pill" type="submit">Log in</button>
+          <button className="btn primary pill" type="submit" disabled={loading}>
+            {loading ? 'Logging in…' : 'Log in'}
+          </button>
         </form>
 
-        <p className="muted">No real account needed — this is a demo using mock data.</p>
+        <p className="muted">First login creates your account automatically.</p>
       </section>
     </main>
   );
