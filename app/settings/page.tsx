@@ -2,8 +2,9 @@
 
 import { useSession, signOut } from 'next-auth/react'
 import { useState, useEffect } from 'react'
-import { User, Bell, Link2, GraduationCap, LogOut, CheckCircle2, ChevronRight } from 'lucide-react'
+import { User, Bell, Link2, GraduationCap, LogOut, CheckCircle2 } from 'lucide-react'
 import Image from 'next/image'
+import { ConnectedAccounts } from '@/src/components/plaid/ConnectedAccounts'
 
 const courses = [
   { id: 'stocks', label: 'Stocks 101', icon: '📈' },
@@ -94,24 +95,7 @@ export default function SettingsPage() {
           <Link2 size={18} className="text-purple-500" />
           <h2 className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>Connected Accounts</h2>
         </div>
-        <div className="space-y-3">
-          {[
-            { name: 'Bank Account', desc: 'Connect your checking/savings for spending data' },
-            { name: 'Investment Broker', desc: 'Sync your brokerage for live portfolio data' },
-            { name: 'PayPal / Venmo', desc: 'Track peer-to-peer payments' },
-          ].map(a => (
-            <div key={a.name} className="flex items-center justify-between p-4 rounded-2xl border border-gray-100 hover:bg-pink-50/30 transition-colors cursor-pointer" onClick={showToast}>
-              <div>
-                <p className="text-sm font-semibold text-gray-700" style={{ fontFamily: 'Nunito, sans-serif' }}>{a.name}</p>
-                <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>{a.desc}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs bg-amber-50 text-amber-600 px-2 py-1 rounded-full font-semibold">Coming soon</span>
-                <ChevronRight size={16} className="text-gray-300" />
-              </div>
-            </div>
-          ))}
-        </div>
+        <ConnectedAccounts />
       </div>
 
       {/* Notifications */}

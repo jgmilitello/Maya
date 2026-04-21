@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   mockBudgetTransactions,
   BUDGET_CATEGORIES,
@@ -11,7 +11,8 @@ import {
   type MockTransaction,
 } from '@/src/lib/mock-data'
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
-import { Plus, X, Search, Lightbulb } from 'lucide-react'
+import { Plus, X, Search, Lightbulb, Building2, RefreshCw } from 'lucide-react'
+import Link from 'next/link'
 
 function fmt(n: number) {
   return `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
@@ -137,16 +138,44 @@ export function BudgetingDashboard() {
   const [showModal, setShowModal] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [filterCategory, setFilterCategory] = useState<string>('All')
+  const [plaidConnected, setPlaidConnected] = useState(false)
+  const [syncing, setSyncing] = useState(false)
 
-  const spending = getBudgetSpending()
-  // Update with any manually added transactions
-  const updatedSpending = { ...spending }
+  // Try to fetch real Plaid transactions on mount
+  useEffect(() => {
+    fetch('/api/plaid/transactions?days=30')
+      .then(r => r.json())
+      .then(data => {
+        if (data.connected && data.transactions?.length > 0) {
+          setPlaidConnected(true)
+          setTransactions(data.transactions as MockTransaction[])
+        }
+      })
+      .catch(() => {})
+  }, [])
+
+  async function syncPlaid() {
+    setSyncing(true)
+    try {
+      const res = await fetch('/api/plaid/transactions?days=30')
+      const data = await res.json()
+      if (data.connected && data.transactions?.length > 0) {
+        setTransactions(data.transactions as MockTransaction[])
+      }
+    } catch { /* ignore */ }
+    setSyncing(false)
+  }
+
+  // Compute spending — use real data when connected, mock when not
+  const currentMonth = new Date().toISOString().slice(0, 7)
+  const spending: Record<string, number> = {}
+  BUDGET_CATEGORIES.forEach(cat => { spending[cat] = 0 })
   transactions
-    .filter(t => t.type === 'expense' && t.date.startsWith('2026-04') && !mockBudgetTransactions.includes(t))
-    .forEach(t => { if (updatedSpending[t.category] !== undefined) updatedSpending[t.category] += t.amount })
+    .filter(t => t.type === 'expense' && t.date.startsWith(plaidConnected ? currentMonth : '2026-04'))
+    .forEach(t => { if (spending[t.category] !== undefined) spending[t.category] += t.amount })
 
   const totalBudget = Object.values(CATEGORY_BUDGETS).reduce((s, v) => s + v, 0)
-  const totalSpent = Object.values(updatedSpending).reduce((s, v) => s + v, 0)
+  const totalSpent = Object.values(spending).reduce((s, v) => s + v, 0)
   const totalIncome = transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0)
 
   // Filter transactions
@@ -159,13 +188,13 @@ export function BudgetingDashboard() {
   // Pie chart data
   const pieData = BUDGET_CATEGORIES.map(cat => ({
     name: cat,
-    value: updatedSpending[cat] ?? 0,
+    value: spending[cat] ?? 0,
     color: CATEGORY_COLORS[cat],
   })).filter(d => d.value > 0)
 
   // Smart insight
   const topCategory = BUDGET_CATEGORIES.reduce((top, cat) => {
-    const pct = CATEGORY_BUDGETS[cat] > 0 ? (updatedSpending[cat] ?? 0) / CATEGORY_BUDGETS[cat] : 0
+    const pct = CATEGORY_BUDGETS[cat] > 0 ? (spending[cat] ?? 0) / CATEGORY_BUDGETS[cat] : 0
     return pct > (top.pct ?? 0) ? { cat, pct } : top
   }, { cat: '', pct: 0 })
 
@@ -193,7 +222,9 @@ export function BudgetingDashboard() {
             Your Budget 💰
           </h1>
           <p className="text-gray-500 text-sm mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>
-            April 2026 — let's see where your money is going
+            {plaidConnected
+              ? `${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} — live data from your bank`
+              : 'April 2026 — let\'s see where your money is going'}
           </p>
         </div>
         <button
@@ -205,6 +236,36 @@ export function BudgetingDashboard() {
           Add Transaction
         </button>
       </div>
+
+      {/* Plaid connection banner */}
+      {plaidConnected ? (
+        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Building2 size={18} className="text-emerald-500" />
+            <div>
+              <p className="font-bold text-emerald-700 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>Bank connected — showing real spending data</p>
+              <p className="text-emerald-600 text-xs" style={{ fontFamily: 'DM Sans, sans-serif' }}>Last 30 days from your connected accounts</p>
+            </div>
+          </div>
+          <button onClick={syncPlaid} disabled={syncing} className="flex items-center gap-1.5 text-xs font-semibold text-emerald-600 hover:text-emerald-700 disabled:opacity-50">
+            <RefreshCw size={13} className={syncing ? 'animate-spin' : ''} />
+            {syncing ? 'Syncing...' : 'Sync'}
+          </button>
+        </div>
+      ) : (
+        <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <Building2 size={18} className="text-purple-400" />
+            <div>
+              <p className="font-bold text-purple-700 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>Using sample data</p>
+              <p className="text-purple-500 text-xs" style={{ fontFamily: 'DM Sans, sans-serif' }}>Connect your bank in Settings to see real spending</p>
+            </div>
+          </div>
+          <Link href="/settings" className="text-xs font-bold text-purple-600 hover:text-purple-700 whitespace-nowrap border border-purple-300 rounded-full px-3 py-1.5 hover:bg-purple-100 transition-colors" style={{ fontFamily: 'Nunito, sans-serif' }}>
+            Connect bank →
+          </Link>
+        </div>
+      )}
 
       {/* Smart insight */}
       <div className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50 flex items-start gap-3">
@@ -291,7 +352,7 @@ export function BudgetingDashboard() {
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {BUDGET_CATEGORIES.map(cat => {
-            const spent = updatedSpending[cat] ?? 0
+            const spent = spending[cat] ?? 0
             const budget = CATEGORY_BUDGETS[cat]
             const pct = budget > 0 ? Math.min((spent / budget) * 100, 100) : 0
             const color = CATEGORY_COLORS[cat]

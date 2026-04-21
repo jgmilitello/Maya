@@ -43,8 +43,33 @@ model User {
   transactions      Transaction[]
   budgets           Budget[]
   courseCompletions CourseCompletion[]
+  plaidItems        PlaidItem[]
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
+}
+
+model PlaidItem {
+  id              String   @id @default(cuid())
+  userId          String
+  itemId          String   @unique
+  accessToken     String
+  institutionId   String?
+  institutionName String?
+  createdAt       DateTime @default(now())
+  user            User     @relation(fields: [userId], references: [id])
+}
+
+model PlaidAccount {
+  id            String  @id @default(cuid())
+  plaidItemId   String
+  accountId     String  @unique
+  name          String
+  officialName  String?
+  type          String
+  subtype       String?
+  mask          String?
+  currentBalance Float?
+  availableBalance Float?
 }
 
 model VerificationToken {
