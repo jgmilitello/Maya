@@ -1,0 +1,42 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { CourseFlow } from '@/src/components/CourseFlow'
+import { bondsCourse } from '@/src/lib/courses'
+import { BondsDashboard } from '@/src/components/bonds/BondsDashboard'
+
+export default function BondsPage() {
+  const [courseStatus, setCourseStatus] = useState<'loading' | 'needed' | 'done'>('loading')
+
+  useEffect(() => {
+    fetch('/api/courses/status?course=bonds')
+      .then(r => r.json())
+      .then(data => setCourseStatus(data.completed ? 'done' : 'needed'))
+      .catch(() => setCourseStatus('needed'))
+  }, [])
+
+  if (courseStatus === 'loading') {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="flex gap-1">
+          {[0,1,2].map(i => (
+            <div key={i} className="w-2 h-2 rounded-full bg-pink-400 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (courseStatus === 'needed') {
+    return (
+      <CourseFlow
+        courseId="bonds"
+        courseName="Bonds"
+        steps={bondsCourse}
+        onComplete={() => setCourseStatus('done')}
+      />
+    )
+  }
+
+  return <BondsDashboard />
+}
