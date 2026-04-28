@@ -47,15 +47,15 @@ export function BondsDashboard() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+          <h1 className="text-2xl font-black text-gray-800 font-heading">
             Your Bond Portfolio 🏦
           </h1>
         </div>
         <div className="bg-white rounded-2xl p-12 shadow-sm border border-pink-50 flex flex-col items-center text-center gap-3">
           <span className="text-5xl">🏛️</span>
-          <h2 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>No bonds added yet</h2>
-          <p className="text-gray-500 text-sm max-w-sm" style={{ fontFamily: 'DM Sans, sans-serif' }}>
-            You indicated you don't hold any bonds, or skipped this step during onboarding. You can update your data from Settings.
+          <h2 className="text-xl font-bold text-gray-800 font-heading">No bonds added yet</h2>
+          <p className="text-gray-500 text-sm max-w-sm">
+            You indicated you don&apos;t hold any bonds, or skipped this step during onboarding. You can update your data from Settings.
           </p>
         </div>
       </div>
@@ -80,10 +80,10 @@ export function BondsDashboard() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+        <h1 className="text-2xl font-black text-gray-800 font-heading">
           Your Bond Portfolio 🏦
         </h1>
-        <p className="text-gray-500 text-sm mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+        <p className="text-gray-500 text-sm mt-1">
           Stable, predictable returns from {bonds.length} bond{bonds.length !== 1 ? 's' : ''}
         </p>
       </div>
@@ -91,12 +91,12 @@ export function BondsDashboard() {
       {/* Summary cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50">
-          <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Total Face Value</p>
-          <p className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(totalInvested)}</p>
+          <p className="text-xs text-gray-400 mb-1">Total Face Value</p>
+          <p className="text-2xl font-black text-gray-800 font-heading">{fmt(totalInvested)}</p>
         </div>
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50">
-          <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Current Value</p>
-          <p className="text-2xl font-black text-gray-800 mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(totalValue)}</p>
+          <p className="text-xs text-gray-400 mb-1">Current Value</p>
+          <p className="text-2xl font-black text-gray-800 mb-1 font-heading">{fmt(totalValue)}</p>
           {totalGain !== 0 && (
             <div className={`flex items-center gap-1 text-xs font-semibold ${totalGain >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
               <ArrowUpRight size={12} />
@@ -105,16 +105,16 @@ export function BondsDashboard() {
           )}
         </div>
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50">
-          <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Average Coupon Rate</p>
-          <p className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{avgYield.toFixed(2)}%</p>
-          <p className="text-xs text-gray-400 mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Across all bonds</p>
+          <p className="text-xs text-gray-400 mb-1">Average Coupon Rate</p>
+          <p className="text-2xl font-black text-gray-800 font-heading">{avgYield.toFixed(2)}%</p>
+          <p className="text-xs text-gray-400 mt-1">Across all bonds</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Yield comparison chart */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-pink-50">
-          <h3 className="font-bold text-gray-800 mb-4" style={{ fontFamily: 'Nunito, sans-serif' }}>Coupon Rate Comparison</h3>
+          <h3 className="font-bold text-gray-800 mb-4 font-heading">Coupon Rate Comparison</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={chartData} margin={{ top: 5, right: 5, left: 0, bottom: 0 }}>
               <XAxis
@@ -151,7 +151,7 @@ export function BondsDashboard() {
             {Object.entries(TYPE_CONFIG).map(([key, cfg]) => (
               <div key={key} className="flex items-center gap-1.5">
                 <div className="w-2.5 h-2.5 rounded-full" style={{ background: cfg.color }} />
-                <span className="text-xs text-gray-500" style={{ fontFamily: 'DM Sans, sans-serif' }}>{cfg.label}</span>
+                <span className="text-xs text-gray-500">{cfg.label}</span>
               </div>
             ))}
           </div>
@@ -160,7 +160,7 @@ export function BondsDashboard() {
         {/* Holdings list */}
         <div className="bg-white rounded-2xl shadow-sm border border-pink-50 overflow-hidden">
           <div className="px-6 py-4 border-b border-pink-50">
-            <h3 className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>Holdings</h3>
+            <h3 className="font-bold text-gray-800 font-heading">Holdings</h3>
           </div>
           <div className="divide-y divide-pink-50">
             {bonds.map(bond => {
@@ -174,40 +174,40 @@ export function BondsDashboard() {
                         {cfg.icon}
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{bond.name}</p>
-                        <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>{bond.issuer ?? cfg.label}</p>
+                        <p className="text-sm font-semibold text-gray-800 font-heading">{bond.name}</p>
+                        <p className="text-xs text-gray-400">{bond.issuer ?? cfg.label}</p>
                       </div>
                     </div>
                     <span className={`text-xs px-2 py-1 rounded-full font-semibold ${cfg.bg} ${cfg.text}`}>{cfg.label}</span>
                   </div>
                   <div className="grid grid-cols-3 gap-2 mt-3">
                     <div>
-                      <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Face Value</p>
-                      <p className="text-sm font-bold text-gray-700" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(bond.faceValue)}</p>
+                      <p className="text-xs text-gray-400">Face Value</p>
+                      <p className="text-sm font-bold text-gray-700 font-heading">{fmt(bond.faceValue)}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Coupon</p>
-                      <p className="text-sm font-bold text-gray-700" style={{ fontFamily: 'Nunito, sans-serif' }}>{bond.couponRate}%</p>
+                      <p className="text-xs text-gray-400">Coupon</p>
+                      <p className="text-sm font-bold text-gray-700 font-heading">{bond.couponRate}%</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Current Value</p>
-                      <p className={`text-sm font-bold ${cfg.text}`} style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(bond.currentValue)}</p>
+                      <p className="text-xs text-gray-400">Current Value</p>
+                      <p className={`text-sm font-bold ${cfg.text} font-heading`}>{fmt(bond.currentValue)}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Gain/Loss</p>
-                      <p className={`text-sm font-bold ${gain >= 0 ? 'text-emerald-500' : 'text-red-500'}`} style={{ fontFamily: 'Nunito, sans-serif' }}>
+                      <p className="text-xs text-gray-400">Gain/Loss</p>
+                      <p className={`text-sm font-bold ${gain >= 0 ? 'text-emerald-500' : 'text-red-500'} font-heading`}>
                         {gain >= 0 ? '+' : ''}{fmt(gain)}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Matures</p>
-                      <p className="text-sm font-bold text-gray-700" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                      <p className="text-xs text-gray-400">Matures</p>
+                      <p className="text-sm font-bold text-gray-700 font-heading">
                         {new Date(bond.maturityDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Issuer</p>
-                      <p className="text-sm font-bold text-gray-700 truncate" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                      <p className="text-xs text-gray-400">Issuer</p>
+                      <p className="text-sm font-bold text-gray-700 truncate font-heading">
                         {bond.issuer ?? '—'}
                       </p>
                     </div>

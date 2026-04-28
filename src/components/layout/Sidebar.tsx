@@ -28,10 +28,10 @@ export function Sidebar() {
       <aside className="hidden md:flex flex-col w-64 min-h-screen bg-white border-r border-pink-100 shadow-sm">
         {/* Logo — click goes back to home */}
         <Link href="/" className="flex items-center gap-2 px-6 py-6 border-b border-pink-100 hover:opacity-80 transition-opacity">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #E91E8C, #7C3AED)' }}>
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-brand">
             <Sparkles size={18} className="text-white" />
           </div>
-          <span className="text-xl font-black" style={{ fontFamily: 'Nunito, sans-serif', background: 'linear-gradient(135deg, #E91E8C, #7C3AED)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <span className="text-xl font-black font-heading text-brand-gradient">
             Mayas
           </span>
         </Link>
@@ -46,13 +46,12 @@ export function Sidebar() {
                 href={href}
                 className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-200 group ${
                   active
-                    ? 'text-white shadow-md'
+                    ? 'text-white shadow-md bg-brand'
                     : 'text-gray-500 hover:bg-pink-50 hover:text-pink-600'
                 }`}
-                style={active ? { background: 'linear-gradient(135deg, #E91E8C, #7C3AED)' } : {}}
               >
                 <Icon size={20} className={active ? 'text-white' : 'text-gray-400 group-hover:text-pink-500'} />
-                <span className={`font-semibold text-sm ${active ? 'text-white' : ''}`} style={{ fontFamily: 'Nunito, sans-serif' }}>
+                <span className={`font-semibold text-sm ${active ? 'text-white' : ''} font-heading`}>
                   {label}
                 </span>
               </Link>
@@ -62,7 +61,7 @@ export function Sidebar() {
 
         {/* Bottom tagline */}
         <div className="px-6 py-4 border-t border-pink-100">
-          <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+          <p className="text-xs text-gray-400">
             Finance made beautiful ✨
           </p>
         </div>
@@ -79,15 +78,11 @@ export function Sidebar() {
                 href={href}
                 className="flex flex-col items-center gap-1 px-2 py-1"
               >
-                <div
-                  className={`p-2 rounded-xl transition-all ${active ? 'shadow-sm' : ''}`}
-                  style={active ? { background: 'linear-gradient(135deg, #E91E8C, #7C3AED)' } : {}}
-                >
+                <div className={`p-2 rounded-xl transition-all ${active ? 'shadow-sm bg-brand' : ''}`}>
                   <Icon size={18} className={active ? 'text-white' : 'text-gray-400'} />
                 </div>
                 <span
-                  className={`text-xs font-semibold ${active ? 'text-pink-600' : 'text-gray-400'}`}
-                  style={{ fontFamily: 'Nunito, sans-serif' }}
+                  className={`text-xs font-semibold ${active ? 'text-pink-600' : 'text-gray-400'} font-heading`}
                 >
                   {label}
                 </span>

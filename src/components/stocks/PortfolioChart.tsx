@@ -43,8 +43,7 @@ export function PortfolioChart() {
           <button
             key={r}
             onClick={() => setRange(r)}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${range === r ? 'text-white shadow-sm' : 'text-gray-400 bg-gray-50 hover:bg-pink-50 hover:text-pink-500'}`}
-            style={range === r ? { background: 'linear-gradient(135deg, #E91E8C, #7C3AED)' } : {}}
+            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${range === r ? 'text-white shadow-sm bg-brand' : 'text-gray-400 bg-gray-50 hover:bg-pink-50 hover:text-pink-500'}`}
           >
             {r}
           </button>

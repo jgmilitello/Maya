@@ -19,8 +19,8 @@ export async function POST(req: NextRequest) {
 
   if (Array.isArray(body)) {
     await prisma.userBond.deleteMany({ where: { userId } })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const bonds = await prisma.userBond.createMany({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: body.map((b: Record<string, unknown>) => ({ ...b, userId })) as any,
     })
     return NextResponse.json({ bonds })

@@ -29,8 +29,23 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Brand gradient utilities — replaces 32+ inline linear-gradient usages */
+.bg-brand {
+  background: linear-gradient(135deg, #E91E8C, #7C3AED);
+}
+.bg-brand-soft {
+  background: linear-gradient(135deg, #FFF0F7 0%, #F5F0FF 50%, #FFF5F9 100%);
+}
+.text-brand-gradient {
+  background: linear-gradient(135deg, #E91E8C, #7C3AED);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 /* Custom scrollbar */

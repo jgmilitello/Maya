@@ -14,11 +14,11 @@ export default function DemoStartPage() {
   }, [router])
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: 'linear-gradient(135deg, #FFF0F7 0%, #F5F0FF 50%, #FFF5F9 100%)' }}>
-      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg animate-pulse" style={{ background: 'linear-gradient(135deg, #E91E8C, #7C3AED)' }}>
+    <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-brand-soft">
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg animate-pulse bg-brand">
         <Sparkles size={28} className="text-white" />
       </div>
-      <p className="text-lg font-black text-gray-700" style={{ fontFamily: 'Nunito, sans-serif' }}>
+      <p className="text-lg font-black text-gray-700 font-heading">
         Setting up your demo…
       </p>
       <div className="flex gap-1">

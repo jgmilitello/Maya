@@ -21,8 +21,8 @@ export async function POST(req: NextRequest) {
   if (Array.isArray(body)) {
     // Replace all stocks for this user
     await prisma.userStock.deleteMany({ where: { userId } })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const stocks = await prisma.userStock.createMany({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: body.map((s: Record<string, unknown>) => ({ ...s, userId })) as any,
     })
     return NextResponse.json({ stocks })

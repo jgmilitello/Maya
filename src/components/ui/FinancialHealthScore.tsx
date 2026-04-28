@@ -153,25 +153,25 @@ export function FinancialHealthScore() {
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+              <span className="text-2xl font-black text-gray-800 font-heading">
                 {total}
               </span>
-              <span className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>/ 100</span>
+              <span className="text-xs text-gray-400">/ 100</span>
             </div>
           </div>
 
           {/* Text */}
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">
               Financial Health Score
             </p>
             <div className="flex items-center gap-2 mb-2">
               <span className="text-lg">{gradeEmoji}</span>
-              <span className="text-xl font-black" style={{ fontFamily: 'Nunito, sans-serif', color: gradeColor }}>
+              <span className="text-xl font-black font-heading" style={{ color: gradeColor }}>
                 {grade}
               </span>
             </div>
-            <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+            <p className="text-xs text-gray-400">
               {expanded ? 'Tap to collapse' : 'Tap to see your breakdown →'}
             </p>
           </div>
@@ -189,9 +189,9 @@ export function FinancialHealthScore() {
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-base">{b.icon}</span>
-                    <span className="text-sm font-semibold text-gray-700" style={{ fontFamily: 'Nunito, sans-serif' }}>{b.label}</span>
+                    <span className="text-sm font-semibold text-gray-700 font-heading">{b.label}</span>
                   </div>
-                  <span className="text-sm font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                  <span className="text-sm font-black text-gray-800 font-heading">
                     {b.earned}<span className="text-xs text-gray-400 font-normal">/{b.max}</span>
                   </span>
                 </div>
@@ -201,7 +201,7 @@ export function FinancialHealthScore() {
                     style={{ width: `${pct}%`, background: barColor }}
                   />
                 </div>
-                <p className="text-xs text-gray-400 italic" style={{ fontFamily: 'DM Sans, sans-serif' }}>{b.tip}</p>
+                <p className="text-xs text-gray-400 italic">{b.tip}</p>
               </div>
             )
           })}

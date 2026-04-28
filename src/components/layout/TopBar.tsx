@@ -54,10 +54,10 @@ export function TopBar() {
   return (
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-pink-100 px-6 py-4 flex items-center justify-between">
       <div>
-        <h2 className="text-lg font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+        <h2 className="text-lg font-bold text-gray-800 font-heading">
           Hey, {firstName}! 👋
         </h2>
-        <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+        <p className="text-xs text-gray-400">
           {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
         </p>
       </div>
@@ -77,10 +77,10 @@ export function TopBar() {
           {bellOpen && (
             <div className="absolute right-0 top-12 w-80 bg-white rounded-3xl shadow-2xl border border-pink-100 overflow-hidden z-50">
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-4 border-b border-pink-50" style={{ background: 'linear-gradient(135deg, #FFF0F7, #F5F0FF)' }}>
+              <div className="flex items-center justify-between px-5 py-4 border-b border-pink-50 bg-brand-soft">
                 <div className="flex items-center gap-2">
                   <span className="text-lg">💡</span>
-                  <p className="font-black text-gray-800 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>Finance Fact of the Day</p>
+                  <p className="font-black text-gray-800 text-sm font-heading">Finance Fact of the Day</p>
                 </div>
                 <button onClick={() => setBellOpen(false)} className="w-7 h-7 rounded-full bg-white/80 flex items-center justify-center hover:bg-white transition-colors">
                   <X size={13} className="text-gray-400" />
@@ -91,7 +91,7 @@ export function TopBar() {
               <div className="px-5 py-5">
                 <div className="flex gap-3">
                   <span className="text-3xl flex-shrink-0 mt-0.5">{currentFact.emoji}</span>
-                  <p className="text-sm text-gray-600 leading-relaxed" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+                  <p className="text-sm text-gray-600 leading-relaxed">
                     {currentFact.fact}
                   </p>
                 </div>
@@ -101,8 +101,7 @@ export function TopBar() {
               <div className="px-5 pb-5">
                 <button
                   onClick={() => setFactIndex(i => (i + 1) % FINANCE_FACTS.length)}
-                  className="w-full py-2.5 rounded-2xl text-sm font-bold text-white transition-all hover:scale-[1.02] hover:shadow-md"
-                  style={{ background: 'linear-gradient(135deg, #E91E8C, #7C3AED)', fontFamily: 'Nunito, sans-serif' }}
+                  className="w-full py-2.5 rounded-2xl text-sm font-bold text-white transition-all hover:scale-[1.02] hover:shadow-md font-heading bg-brand"
                 >
                   ✨ Another fact!
                 </button>
@@ -112,11 +111,11 @@ export function TopBar() {
         </div>
 
         {/* Avatar — click goes to Settings */}
-        <Link href="/settings" className="w-9 h-9 rounded-full overflow-hidden border-2 border-pink-200 flex items-center justify-center hover:border-pink-400 transition-colors" style={{ background: 'linear-gradient(135deg, #E91E8C, #7C3AED)' }}>
+        <Link href="/settings" className="w-9 h-9 rounded-full overflow-hidden border-2 border-pink-200 flex items-center justify-center hover:border-pink-400 transition-colors bg-brand">
           {session?.user?.image ? (
             <Image src={session.user.image} alt="avatar" width={36} height={36} className="w-full h-full object-cover" />
           ) : (
-            <span className="text-white text-sm font-bold" style={{ fontFamily: 'Nunito, sans-serif' }}>
+            <span className="text-white text-sm font-bold font-heading">
               {firstName.charAt(0).toUpperCase()}
             </span>
           )}

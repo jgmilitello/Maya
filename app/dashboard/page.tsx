@@ -45,29 +45,26 @@ export default async function DashboardPage() {
   const totalLiabilities = totalCCBalance
   const netWorth = totalAssets - totalLiabilities
 
-  // Budget overview using 50/30/20 rule from income
-  const needsBudget = monthlyIncome * 0.5
-  const wantsBudget = monthlyIncome * 0.3
-  const totalBudget = needsBudget + wantsBudget
-  const estimatedMonthlySpending = totalCCBalance * 0.3 // rough estimate from cc balance
+  // 50/30/20 rule — needs (50%) + wants (30%) = 80% of income budgeted
+  const totalBudget = monthlyIncome * 0.8
 
   return (
     <div className="space-y-6">
       {/* Greeting */}
       <div>
-        <h1 className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+        <h1 className="text-2xl font-black text-gray-800 font-heading">
           Your financial snapshot 💖
         </h1>
-        <p className="text-gray-500 text-sm mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>
-          Here's everything at a glance, {firstName}.
+        <p className="text-gray-500 text-sm mt-1">
+          Here&apos;s everything at a glance, {firstName}.
         </p>
       </div>
 
       {/* Net Worth Card */}
-      <div className="rounded-3xl p-6 text-white shadow-lg" style={{ background: 'linear-gradient(135deg, #E91E8C 0%, #7C3AED 100%)' }}>
-        <p className="text-pink-100 text-sm font-semibold mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Total Net Worth</p>
+      <div className="rounded-3xl p-6 text-white shadow-lg bg-brand">
+        <p className="text-pink-100 text-sm font-semibold mb-1">Total Net Worth</p>
         <div className="flex items-end gap-4 mb-1">
-          <h2 className="text-4xl font-black" style={{ fontFamily: 'Nunito, sans-serif' }}>
+          <h2 className="text-4xl font-black font-heading">
             {fmt(netWorth)}
           </h2>
           {totalPortfolioValue > 0 && (
@@ -77,7 +74,7 @@ export default async function DashboardPage() {
             </div>
           )}
         </div>
-        <p className="text-pink-100 text-sm mb-5" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+        <p className="text-pink-100 text-sm mb-5">
           Assets: {fmt(totalAssets, { compact: true })} &nbsp;|&nbsp; Liabilities: {fmt(totalLiabilities, { compact: true })}
         </p>
         <NetWorthChart />
@@ -101,8 +98,8 @@ export default async function DashboardPage() {
               </div>
             )}
           </div>
-          <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Portfolio</p>
-          <p className="text-lg font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+          <p className="text-xs text-gray-400 mb-1">Portfolio</p>
+          <p className="text-lg font-bold text-gray-800 font-heading">
             {stocks.length > 0 ? fmt(totalPortfolioValue, { compact: true }) : '—'}
           </p>
           {stocks.length > 0 && portfolioTodayChange !== 0 && (
@@ -127,8 +124,8 @@ export default async function DashboardPage() {
               </span>
             )}
           </div>
-          <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Credit Cards</p>
-          <p className="text-lg font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+          <p className="text-xs text-gray-400 mb-1">Credit Cards</p>
+          <p className="text-lg font-bold text-gray-800 font-heading">
             {cards.length > 0 ? fmt(totalCCBalance) : '—'}
           </p>
           {cards.length > 0 ? (
@@ -145,8 +142,8 @@ export default async function DashboardPage() {
               <PiggyBank size={18} className="text-pink-500" />
             </div>
           </div>
-          <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Monthly Income</p>
-          <p className="text-lg font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+          <p className="text-xs text-gray-400 mb-1">Monthly Income</p>
+          <p className="text-lg font-bold text-gray-800 font-heading">
             {monthlyIncome > 0 ? fmt(monthlyIncome, { compact: true }) : '—'}
           </p>
           {monthlyIncome > 0 && totalBudget > 0 && (
@@ -161,8 +158,8 @@ export default async function DashboardPage() {
               <Wallet size={18} className="text-purple-500" />
             </div>
           </div>
-          <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Bank Balance</p>
-          <p className="text-lg font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+          <p className="text-xs text-gray-400 mb-1">Bank Balance</p>
+          <p className="text-lg font-bold text-gray-800 font-heading">
             {bankBalance > 0 ? fmt(bankBalance, { compact: true }) : '—'}
           </p>
           {bankBalance > 0 && monthlyIncome > 0 && (
@@ -176,8 +173,8 @@ export default async function DashboardPage() {
 
         {/* Stock holdings summary */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-pink-50">
-          <h3 className="font-bold text-gray-800 mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>Stock Holdings</h3>
-          <p className="text-xs text-gray-400 mb-4" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+          <h3 className="font-bold text-gray-800 mb-1 font-heading">Stock Holdings</h3>
+          <p className="text-xs text-gray-400 mb-4">
             {stocks.length > 0 ? `${stocks.length} position${stocks.length !== 1 ? 's' : ''} — ${fmt(totalPortfolioValue)} total` : 'No stocks added yet'}
           </p>
           {stocks.length > 0 ? (
@@ -189,16 +186,16 @@ export default async function DashboardPage() {
                 return (
                   <div key={s.id} className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-pink-50 flex items-center justify-center text-xs font-bold text-pink-600" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                      <div className="w-9 h-9 rounded-xl bg-pink-50 flex items-center justify-center text-xs font-bold text-pink-600 font-heading">
                         {s.ticker.slice(0, 4)}
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-gray-700" style={{ fontFamily: 'DM Sans, sans-serif' }}>{s.ticker}</p>
+                        <p className="text-sm font-semibold text-gray-700">{s.ticker}</p>
                         <p className="text-xs text-gray-400">{pct.toFixed(1)}% of portfolio</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(value)}</p>
+                      <p className="text-sm font-bold text-gray-800 font-heading">{fmt(value)}</p>
                       <p className={`text-xs font-medium ${dayChange >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
                         {dayChange >= 0 ? '+' : ''}{fmt(dayChange)} today
                       </p>
@@ -207,7 +204,7 @@ export default async function DashboardPage() {
                 )
               })}
               {stocks.length > 5 && (
-                <p className="text-xs text-gray-400 text-center pt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+                <p className="text-xs text-gray-400 text-center pt-1">
                   +{stocks.length - 5} more positions
                 </p>
               )}
@@ -215,7 +212,7 @@ export default async function DashboardPage() {
           ) : (
             <div className="flex flex-col items-center justify-center py-6 text-center">
               <span className="text-3xl mb-2">📈</span>
-              <p className="text-sm text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Complete the Stocks course to track your portfolio</p>
+              <p className="text-sm text-gray-400">Complete the Stocks course to track your portfolio</p>
             </div>
           )}
         </div>
@@ -224,8 +221,8 @@ export default async function DashboardPage() {
         <div className="space-y-4">
           {/* CC quick summary */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-pink-50">
-            <h3 className="font-bold text-gray-800 mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>Credit Cards</h3>
-            <p className="text-xs text-gray-400 mb-3" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+            <h3 className="font-bold text-gray-800 mb-1 font-heading">Credit Cards</h3>
+            <p className="text-xs text-gray-400 mb-3">
               {cards.length > 0 ? `${cards.length} card${cards.length !== 1 ? 's' : ''} — ${ccUtilization.toFixed(1)}% utilization` : 'No cards added'}
             </p>
             {cards.length > 0 ? (
@@ -233,25 +230,25 @@ export default async function DashboardPage() {
                 {cards.slice(0, 3).map(c => (
                   <div key={c.id} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-gray-500 uppercase" style={{ fontFamily: 'DM Sans, sans-serif' }}>{c.network}</span>
+                      <span className="text-xs font-semibold text-gray-500 uppercase">{c.network}</span>
                       <span className="text-xs text-gray-400">···{c.lastFour}</span>
                     </div>
                     <div className="text-right">
-                      <span className="text-sm font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(c.balance)}</span>
+                      <span className="text-sm font-bold text-gray-800 font-heading">{fmt(c.balance)}</span>
                       <span className="text-xs text-gray-400 ml-1">/ {fmt(c.creditLimit)}</span>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-400 text-center py-2" style={{ fontFamily: 'DM Sans, sans-serif' }}>Complete the Credit Cards course to track yours</p>
+              <p className="text-sm text-gray-400 text-center py-2">Complete the Credit Cards course to track yours</p>
             )}
           </div>
 
           {/* Bonds quick summary */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-pink-50">
-            <h3 className="font-bold text-gray-800 mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>Bonds</h3>
-            <p className="text-xs text-gray-400 mb-3" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+            <h3 className="font-bold text-gray-800 mb-1 font-heading">Bonds</h3>
+            <p className="text-xs text-gray-400 mb-3">
               {bonds.length > 0 ? `${bonds.length} bond${bonds.length !== 1 ? 's' : ''} — ${fmt(totalBondsValue)} total` : 'No bonds added'}
             </p>
             {bonds.length > 0 ? (
@@ -259,15 +256,15 @@ export default async function DashboardPage() {
                 {bonds.slice(0, 3).map(b => (
                   <div key={b.id} className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-700" style={{ fontFamily: 'DM Sans, sans-serif' }}>{b.name}</p>
+                      <p className="text-sm font-medium text-gray-700">{b.name}</p>
                       <p className="text-xs text-gray-400">{b.couponRate}% coupon · matures {new Date(b.maturityDate).getFullYear()}</p>
                     </div>
-                    <span className="text-sm font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(b.currentValue)}</span>
+                    <span className="text-sm font-bold text-gray-800 font-heading">{fmt(b.currentValue)}</span>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-400 text-center py-2" style={{ fontFamily: 'DM Sans, sans-serif' }}>Complete the Bonds course to track your bonds</p>
+              <p className="text-sm text-gray-400 text-center py-2">Complete the Bonds course to track your bonds</p>
             )}
           </div>
         </div>

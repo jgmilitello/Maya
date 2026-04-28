@@ -19,8 +19,8 @@ export async function POST(req: NextRequest) {
 
   if (Array.isArray(body)) {
     await prisma.userCreditCard.deleteMany({ where: { userId } })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cards = await prisma.userCreditCard.createMany({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: body.map((c: Record<string, unknown>) => ({ ...c, userId })) as any,
     })
     return NextResponse.json({ cards })

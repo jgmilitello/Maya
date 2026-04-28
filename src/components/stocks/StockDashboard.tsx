@@ -43,18 +43,18 @@ export function StockDashboard() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+          <h1 className="text-2xl font-black text-gray-800 font-heading">
             Your Stock Portfolio 📈
           </h1>
-          <p className="text-gray-500 text-sm mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+          <p className="text-gray-500 text-sm mt-1">
             All your holdings in one place
           </p>
         </div>
         <div className="bg-white rounded-2xl p-12 shadow-sm border border-pink-50 flex flex-col items-center text-center gap-3">
           <span className="text-5xl">📊</span>
-          <h2 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>No stocks added yet</h2>
-          <p className="text-gray-500 text-sm max-w-sm" style={{ fontFamily: 'DM Sans, sans-serif' }}>
-            You didn't add any stock holdings during onboarding. You can re-visit your financial data from Settings.
+          <h2 className="text-xl font-bold text-gray-800 font-heading">No stocks added yet</h2>
+          <p className="text-gray-500 text-sm max-w-sm">
+            You didn&apos;t add any stock holdings during onboarding. You can re-visit your financial data from Settings.
           </p>
         </div>
       </div>
@@ -65,10 +65,10 @@ export function StockDashboard() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+        <h1 className="text-2xl font-black text-gray-800 font-heading">
           Your Stock Portfolio 📈
         </h1>
-        <p className="text-gray-500 text-sm mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+        <p className="text-gray-500 text-sm mt-1">
           {stocks.length} position{stocks.length !== 1 ? 's' : ''} — all your holdings in one place
         </p>
       </div>
@@ -78,8 +78,8 @@ export function StockDashboard() {
         <div className="lg:col-span-1 space-y-3">
           {/* Total portfolio */}
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50">
-            <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Total Portfolio</p>
-            <p className="text-2xl font-black text-gray-800 mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>
+            <p className="text-xs text-gray-400 mb-1">Total Portfolio</p>
+            <p className="text-2xl font-black text-gray-800 mb-1 font-heading">
               {fmt(totalPortfolioValue)}
             </p>
             <div className={`flex items-center gap-1 text-sm font-semibold ${totalTodayChange >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
@@ -96,14 +96,14 @@ export function StockDashboard() {
               <div key={st.id} className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50">
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <p className="text-xs font-semibold text-gray-600" style={{ fontFamily: 'Nunito, sans-serif' }}>{st.ticker}</p>
-                    <p className="text-xs text-gray-400 truncate max-w-[130px]" style={{ fontFamily: 'DM Sans, sans-serif' }}>{st.company}</p>
+                    <p className="text-xs font-semibold text-gray-600 font-heading">{st.ticker}</p>
+                    <p className="text-xs text-gray-400 truncate max-w-[130px]">{st.company}</p>
                   </div>
                   <span className="text-xs px-2 py-1 rounded-full bg-pink-50 text-pink-600 font-semibold">
                     {st.shares >= 1 ? st.shares.toLocaleString() : st.shares.toFixed(3)} sh
                   </span>
                 </div>
-                <p className="text-xl font-black text-gray-800 mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                <p className="text-xl font-black text-gray-800 mb-1 font-heading">
                   {fmt(value)}
                 </p>
                 <div className={`flex items-center gap-1 text-xs font-semibold ${dayChange >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
@@ -121,8 +121,8 @@ export function StockDashboard() {
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-pink-50">
             <div className="flex items-end gap-4 mb-2">
               <div>
-                <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Portfolio Value</p>
-                <p className="text-3xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                <p className="text-xs text-gray-400">Portfolio Value</p>
+                <p className="text-3xl font-black text-gray-800 font-heading">
                   {fmt(totalPortfolioValue)}
                 </p>
               </div>
@@ -137,14 +137,14 @@ export function StockDashboard() {
           {/* Holdings table */}
           <div className="bg-white rounded-2xl shadow-sm border border-pink-50 overflow-hidden">
             <div className="px-6 py-4 border-b border-pink-50">
-              <h3 className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>Holdings</h3>
+              <h3 className="font-bold text-gray-800 font-heading">Holdings</h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-pink-50/50">
-                    {['Symbol', 'Last Price', "Today's +/-", 'Total +/-', 'Value', '% Portfolio', 'Shares', 'Cost Basis'].map(h => (
-                      <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-400 whitespace-nowrap" style={{ fontFamily: 'DM Sans, sans-serif' }}>{h}</th>
+                    {['Symbol', 'Last Price', "Today&apos;s +/-", 'Total +/-', 'Value', '% Portfolio', 'Shares', 'Cost Basis'].map(h => (
+                      <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-400 whitespace-nowrap">{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -161,8 +161,8 @@ export function StockDashboard() {
                       <tr key={h.id} className="border-t border-pink-50/50 hover:bg-pink-50/30 transition-colors">
                         <td className="px-4 py-3 whitespace-nowrap">
                           <div>
-                            <p className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{h.ticker}</p>
-                            <p className="text-xs text-gray-400 max-w-[120px] truncate" style={{ fontFamily: 'DM Sans, sans-serif' }}>{h.company}</p>
+                            <p className="font-bold text-gray-800 font-heading">{h.ticker}</p>
+                            <p className="text-xs text-gray-400 max-w-[120px] truncate">{h.company}</p>
                           </div>
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap">
@@ -180,7 +180,7 @@ export function StockDashboard() {
                             <p className="text-xs">{totalGainLossPct !== null ? `${totalGainLossPct >= 0 ? '+' : ''}${totalGainLossPct.toFixed(2)}%` : '—'}</p>
                           </div>
                         </td>
-                        <td className="px-4 py-3 whitespace-nowrap font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                        <td className="px-4 py-3 whitespace-nowrap font-bold text-gray-800 font-heading">
                           {fmt(currentValue)}
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap text-gray-600">
@@ -200,10 +200,10 @@ export function StockDashboard() {
                   })}
                   {/* Total row */}
                   <tr className="border-t-2 border-pink-100 bg-pink-50/50">
-                    <td className="px-4 py-3 font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }} colSpan={4}>
+                    <td className="px-4 py-3 font-bold text-gray-800 font-heading" colSpan={4}>
                       Total Portfolio
                     </td>
-                    <td className="px-4 py-3 font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                    <td className="px-4 py-3 font-black text-gray-800 font-heading">
                       {fmt(totalPortfolioValue)}
                     </td>
                     <td className="px-4 py-3 font-semibold text-gray-600">100%</td>

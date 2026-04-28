@@ -32,9 +32,9 @@ const blankBond = (): BondRow => ({ name: '', type: 'treasury', faceValue: '', c
 function Field({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) {
   return (
     <div>
-      <label className="block text-xs font-semibold text-gray-500 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>{label}</label>
+      <label className="block text-xs font-semibold text-gray-500 mb-1">{label}</label>
       {children}
-      {hint && <p className="text-xs text-gray-400 mt-0.5" style={{ fontFamily: 'DM Sans, sans-serif' }}>{hint}</p>}
+      {hint && <p className="text-xs text-gray-400 mt-0.5">{hint}</p>}
     </div>
   )
 }
@@ -44,7 +44,6 @@ function Input({ className = '', ...props }: React.InputHTMLAttributes<HTMLInput
     <input
       {...props}
       className={`w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-100 transition-colors ${className}`}
-      style={{ fontFamily: 'DM Sans, sans-serif' }}
     />
   )
 }
@@ -54,7 +53,6 @@ function Select({ className = '', children, ...props }: React.SelectHTMLAttribut
     <select
       {...props}
       className={`w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-pink-400 transition-colors bg-white ${className}`}
-      style={{ fontFamily: 'DM Sans, sans-serif' }}
     >
       {children}
     </select>
@@ -222,10 +220,10 @@ export default function OnboardingPage() {
     <div className="min-h-screen bg-[#FFF5F9] flex flex-col items-center justify-start py-10 px-4">
       {/* Logo */}
       <div className="flex items-center gap-2 mb-8">
-        <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #E91E8C, #7C3AED)' }}>
+        <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-brand">
           <Sparkles size={16} className="text-white" />
         </div>
-        <span className="text-xl font-black" style={{ fontFamily: 'Nunito, sans-serif', background: 'linear-gradient(135deg, #E91E8C, #7C3AED)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+        <span className="text-xl font-black font-heading text-brand-gradient">
           Mayas
         </span>
       </div>
@@ -241,13 +239,12 @@ export default function OnboardingPage() {
               <div key={s.id} className="flex flex-col items-center gap-1">
                 <div
                   className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
-                    done ? 'bg-emerald-100' : active ? '' : 'bg-gray-100'
+                    done ? 'bg-emerald-100' : active ? 'bg-brand' : 'bg-gray-100'
                   }`}
-                  style={active ? { background: 'linear-gradient(135deg, #E91E8C, #7C3AED)' } : {}}
                 >
                   <Icon size={16} className={done ? 'text-emerald-500' : active ? 'text-white' : 'text-gray-400'} />
                 </div>
-                <span className={`text-xs font-semibold hidden sm:block ${active ? 'text-pink-600' : done ? 'text-emerald-500' : 'text-gray-400'}`} style={{ fontFamily: 'DM Sans, sans-serif' }}>
+                <span className={`text-xs font-semibold hidden sm:block ${active ? 'text-pink-600' : done ? 'text-emerald-500' : 'text-gray-400'}`}>
                   {s.label}
                 </span>
               </div>
@@ -272,8 +269,7 @@ export default function OnboardingPage() {
         <button
           onClick={() => setStep(s => s - 1)}
           disabled={isFirst}
-          className="flex items-center gap-2 px-5 py-3 rounded-full text-gray-500 font-semibold border border-gray-200 hover:bg-gray-50 disabled:opacity-0 transition-all"
-          style={{ fontFamily: 'Nunito, sans-serif' }}
+          className="flex items-center gap-2 px-5 py-3 rounded-full text-gray-500 font-semibold border border-gray-200 hover:bg-gray-50 disabled:opacity-0 transition-all font-heading"
         >
           <ChevronLeft size={16} /> Back
         </button>
@@ -282,18 +278,16 @@ export default function OnboardingPage() {
           <button
             onClick={handleFinish}
             disabled={saving}
-            className="flex items-center gap-2 px-8 py-3 rounded-full text-white font-bold shadow-md hover:shadow-lg hover:scale-105 transition-all disabled:opacity-70"
-            style={{ background: 'linear-gradient(135deg, #E91E8C, #7C3AED)', fontFamily: 'Nunito, sans-serif' }}
+            className="flex items-center gap-2 px-8 py-3 rounded-full text-white font-bold shadow-md hover:shadow-lg hover:scale-105 transition-all disabled:opacity-70 font-heading bg-brand"
           >
-            {saving ? 'Saving...' : "Let's go! 🎉"}
+            {saving ? 'Saving...' : "Let&apos;s go! 🎉"}
           </button>
         ) : (
           <button
             onClick={() => setStep(s => s + 1)}
-            className="flex items-center gap-2 px-8 py-3 rounded-full text-white font-bold shadow-md hover:shadow-lg hover:scale-105 transition-all"
-            style={{ background: 'linear-gradient(135deg, #E91E8C, #7C3AED)', fontFamily: 'Nunito, sans-serif' }}
+            className="flex items-center gap-2 px-8 py-3 rounded-full text-white font-bold shadow-md hover:shadow-lg hover:scale-105 transition-all font-heading bg-brand"
           >
-            {step === 0 ? "Let's start!" : 'Next'} <ChevronRight size={16} />
+            {step === 0 ? "Let&apos;s start!" : 'Next'} <ChevronRight size={16} />
           </button>
         )}
       </div>
@@ -307,11 +301,11 @@ function StepWelcome() {
   return (
     <div className="text-center py-4">
       <div className="text-6xl mb-5">💖</div>
-      <h1 className="text-3xl font-black text-gray-800 mb-3" style={{ fontFamily: 'Nunito, sans-serif' }}>
+      <h1 className="text-3xl font-black text-gray-800 mb-3 font-heading">
         Welcome to Mayas!
       </h1>
-      <p className="text-gray-500 leading-relaxed max-w-md mx-auto mb-6" style={{ fontFamily: 'DM Sans, sans-serif' }}>
-        Let's set up your personal financial picture. We'll ask you about your bank balance, investments, credit cards, bonds, and monthly budget.
+      <p className="text-gray-500 leading-relaxed max-w-md mx-auto mb-6">
+        Let&apos;s set up your personal financial picture. We&apos;ll ask you about your bank balance, investments, credit cards, bonds, and monthly budget.
       </p>
       <div className="grid grid-cols-2 gap-3 text-left max-w-sm mx-auto">
         {[
@@ -324,11 +318,11 @@ function StepWelcome() {
         ].map(({ icon, text }) => (
           <div key={text} className="flex items-center gap-2 p-3 rounded-xl bg-pink-50">
             <span>{icon}</span>
-            <span className="text-sm font-semibold text-gray-700" style={{ fontFamily: 'DM Sans, sans-serif' }}>{text}</span>
+            <span className="text-sm font-semibold text-gray-700">{text}</span>
           </div>
         ))}
       </div>
-      <p className="text-xs text-gray-400 mt-5" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+      <p className="text-xs text-gray-400 mt-5">
         Your data is stored locally — nothing is shared externally
       </p>
     </div>
@@ -342,8 +336,8 @@ function StepAccounts({ bankBalance, setBankBalance, monthlyIncome, setMonthlyIn
   return (
     <div>
       <div className="text-4xl mb-3 text-center">🏦</div>
-      <h2 className="text-2xl font-black text-gray-800 text-center mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>Bank & Income</h2>
-      <p className="text-gray-400 text-sm text-center mb-7" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+      <h2 className="text-2xl font-black text-gray-800 text-center mb-1 font-heading">Bank & Income</h2>
+      <p className="text-gray-400 text-sm text-center mb-7">
         This gives us your starting net worth and helps with budget math
       </p>
       <div className="space-y-5 max-w-md mx-auto">
@@ -364,8 +358,8 @@ function StepAccounts({ bankBalance, setBankBalance, monthlyIncome, setMonthlyIn
           />
         </Field>
         <div className="p-4 rounded-2xl bg-blue-50 border border-blue-100">
-          <p className="text-xs text-blue-600 font-semibold mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>💡 Don't know the exact number?</p>
-          <p className="text-xs text-blue-500" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+          <p className="text-xs text-blue-600 font-semibold mb-1 font-heading">💡 Don&apos;t know the exact number?</p>
+          <p className="text-xs text-blue-500">
             A rough estimate is totally fine — you can update this anytime in Settings
           </p>
         </div>
@@ -382,9 +376,9 @@ function StepStocks({ stocks, setStocks, updateStock }: {
   return (
     <div>
       <div className="text-4xl mb-3 text-center">📈</div>
-      <h2 className="text-2xl font-black text-gray-800 text-center mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>Stock Holdings</h2>
-      <p className="text-gray-400 text-sm text-center mb-6" style={{ fontFamily: 'DM Sans, sans-serif' }}>
-        Add each stock, ETF, or mutual fund you own. Skip if you don't have any.
+      <h2 className="text-2xl font-black text-gray-800 text-center mb-1 font-heading">Stock Holdings</h2>
+      <p className="text-gray-400 text-sm text-center mb-6">
+        Add each stock, ETF, or mutual fund you own. Skip if you don&apos;t have any.
       </p>
 
       <div className="space-y-4 max-h-[420px] overflow-y-auto pr-1">
@@ -422,8 +416,7 @@ function StepStocks({ stocks, setStocks, updateStock }: {
       <div className="flex gap-3 mt-4">
         <button
           onClick={() => setStocks(s => [...s, blankStock()])}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-pink-300 text-pink-600 text-sm font-semibold hover:bg-pink-50 transition-colors"
-          style={{ fontFamily: 'Nunito, sans-serif' }}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-pink-300 text-pink-600 text-sm font-semibold hover:bg-pink-50 transition-colors font-heading"
         >
           <Plus size={14} /> Add another stock
         </button>
@@ -431,13 +424,12 @@ function StepStocks({ stocks, setStocks, updateStock }: {
           <button
             onClick={() => setStocks(s => s.filter(row => row.ticker))}
             className="text-xs text-gray-400 hover:text-gray-600 px-3 py-2"
-            style={{ fontFamily: 'DM Sans, sans-serif' }}
           >
             Remove empty rows
           </button>
         )}
       </div>
-      <p className="text-xs text-gray-400 mt-3" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+      <p className="text-xs text-gray-400 mt-3">
         * Required fields. Ticker and current price are used to calculate your portfolio value.
       </p>
     </div>
@@ -452,9 +444,9 @@ function StepCards({ cards, setCards, updateCard }: {
   return (
     <div>
       <div className="text-4xl mb-3 text-center">💳</div>
-      <h2 className="text-2xl font-black text-gray-800 text-center mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>Credit Cards</h2>
-      <p className="text-gray-400 text-sm text-center mb-6" style={{ fontFamily: 'DM Sans, sans-serif' }}>
-        Add each credit card you have. Skip if you don't have any.
+      <h2 className="text-2xl font-black text-gray-800 text-center mb-1 font-heading">Credit Cards</h2>
+      <p className="text-gray-400 text-sm text-center mb-6">
+        Add each credit card you have. Skip if you don&apos;t have any.
       </p>
 
       <div className="space-y-4 max-h-[420px] overflow-y-auto pr-1">
@@ -502,8 +494,7 @@ function StepCards({ cards, setCards, updateCard }: {
 
       <button
         onClick={() => setCards(s => [...s, blankCard()])}
-        className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-pink-300 text-pink-600 text-sm font-semibold hover:bg-pink-50 transition-colors mt-4"
-        style={{ fontFamily: 'Nunito, sans-serif' }}
+        className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-pink-300 text-pink-600 text-sm font-semibold hover:bg-pink-50 transition-colors mt-4 font-heading"
       >
         <Plus size={14} /> Add another card
       </button>
@@ -521,8 +512,8 @@ function StepBonds({ bonds, setBonds, updateBond, hasBonds, setHasBonds }: {
   return (
     <div>
       <div className="text-4xl mb-3 text-center">🏛️</div>
-      <h2 className="text-2xl font-black text-gray-800 text-center mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>Bonds</h2>
-      <p className="text-gray-400 text-sm text-center mb-6" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+      <h2 className="text-2xl font-black text-gray-800 text-center mb-1 font-heading">Bonds</h2>
+      <p className="text-gray-400 text-sm text-center mb-6">
         Do you own any bonds, Treasury bills, or I-bonds?
       </p>
 
@@ -530,15 +521,13 @@ function StepBonds({ bonds, setBonds, updateBond, hasBonds, setHasBonds }: {
         <div className="flex gap-4 justify-center">
           <button
             onClick={() => { setHasBonds(true); setBonds([blankBond()]) }}
-            className="flex-1 max-w-[180px] py-4 rounded-2xl border-2 border-pink-300 text-pink-600 font-bold hover:bg-pink-50 transition-colors text-center"
-            style={{ fontFamily: 'Nunito, sans-serif' }}
+            className="flex-1 max-w-[180px] py-4 rounded-2xl border-2 border-pink-300 text-pink-600 font-bold hover:bg-pink-50 transition-colors text-center font-heading"
           >
             ✅ Yes, I do
           </button>
           <button
             onClick={() => setHasBonds(false)}
-            className="flex-1 max-w-[180px] py-4 rounded-2xl border-2 border-gray-200 text-gray-500 font-bold hover:bg-gray-50 transition-colors text-center"
-            style={{ fontFamily: 'Nunito, sans-serif' }}
+            className="flex-1 max-w-[180px] py-4 rounded-2xl border-2 border-gray-200 text-gray-500 font-bold hover:bg-gray-50 transition-colors text-center font-heading"
           >
             ❌ Nope, skip
           </button>
@@ -548,7 +537,7 @@ function StepBonds({ bonds, setBonds, updateBond, hasBonds, setHasBonds }: {
       {hasBonds === false && (
         <div className="text-center py-4">
           <p className="text-3xl mb-3">👍</p>
-          <p className="font-bold text-gray-700" style={{ fontFamily: 'Nunito, sans-serif' }}>No problem! You can add bonds later in your portfolio.</p>
+          <p className="font-bold text-gray-700 font-heading">No problem! You can add bonds later in your portfolio.</p>
         </div>
       )}
 
@@ -599,8 +588,7 @@ function StepBonds({ bonds, setBonds, updateBond, hasBonds, setHasBonds }: {
           </div>
           <button
             onClick={() => setBonds(s => [...s, blankBond()])}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-pink-300 text-pink-600 text-sm font-semibold hover:bg-pink-50 transition-colors mt-4"
-            style={{ fontFamily: 'Nunito, sans-serif' }}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-pink-300 text-pink-600 text-sm font-semibold hover:bg-pink-50 transition-colors mt-4 font-heading"
           >
             <Plus size={14} /> Add another bond
           </button>
@@ -645,22 +633,22 @@ function StepBudget({ budgets, setBudgets, monthlyIncome }: {
   return (
     <div>
       <div className="text-4xl mb-3 text-center">💰</div>
-      <h2 className="text-2xl font-black text-gray-800 text-center mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>Monthly Budget</h2>
-      <p className="text-gray-400 text-sm text-center mb-4" style={{ fontFamily: 'DM Sans, sans-serif' }}>
-        How much do you want to spend in each category? Skip any you don't need.
+      <h2 className="text-2xl font-black text-gray-800 text-center mb-1 font-heading">Monthly Budget</h2>
+      <p className="text-gray-400 text-sm text-center mb-4">
+        How much do you want to spend in each category? Skip any you don&apos;t need.
       </p>
 
       {income > 0 && (
         <div className="flex items-center justify-between p-3 rounded-xl bg-pink-50 border border-pink-100 mb-4">
           <div>
-            <p className="text-xs text-pink-500 font-semibold" style={{ fontFamily: 'DM Sans, sans-serif' }}>Monthly income</p>
-            <p className="font-black text-pink-700" style={{ fontFamily: 'Nunito, sans-serif' }}>${income.toLocaleString()}</p>
+            <p className="text-xs text-pink-500 font-semibold">Monthly income</p>
+            <p className="font-black text-pink-700 font-heading">${income.toLocaleString()}</p>
           </div>
           <div className="text-right">
-            <p className="text-xs font-semibold" style={{ fontFamily: 'DM Sans, sans-serif', color: remaining >= 0 ? '#10B981' : '#EF4444' }}>
+            <p className="text-xs font-semibold" style={{ color: remaining >= 0 ? '#10B981' : '#EF4444' }}>
               {remaining >= 0 ? `$${remaining.toFixed(0)} unbudgeted` : `$${Math.abs(remaining).toFixed(0)} over income`}
             </p>
-            <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>${totalBudgeted.toFixed(0)} budgeted</p>
+            <p className="text-xs text-gray-400">${totalBudgeted.toFixed(0)} budgeted</p>
           </div>
         </div>
       )}
@@ -668,8 +656,7 @@ function StepBudget({ budgets, setBudgets, monthlyIncome }: {
       {income > 0 && (
         <button
           onClick={autofill}
-          className="w-full mb-4 py-2.5 rounded-xl border border-purple-200 text-purple-600 text-sm font-semibold hover:bg-purple-50 transition-colors"
-          style={{ fontFamily: 'Nunito, sans-serif' }}
+          className="w-full mb-4 py-2.5 rounded-xl border border-purple-200 text-purple-600 text-sm font-semibold hover:bg-purple-50 transition-colors font-heading"
         >
           ✨ Auto-fill using 50/30/20 rule
         </button>
@@ -680,7 +667,7 @@ function StepBudget({ budgets, setBudgets, monthlyIncome }: {
           <div key={cat} className="flex items-center gap-2">
             <span className="text-xl flex-shrink-0">{ICONS[cat]}</span>
             <div className="flex-1">
-              <label className="block text-xs font-semibold text-gray-500 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>{cat}</label>
+              <label className="block text-xs font-semibold text-gray-500 mb-1">{cat}</label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
                 <Input

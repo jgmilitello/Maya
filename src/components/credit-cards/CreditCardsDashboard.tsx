@@ -50,8 +50,8 @@ function CardVisual({ card }: { card: UserCard }) {
 
       <div className="flex items-start justify-between relative z-10">
         <div>
-          <p className="text-white/60 text-xs mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Balance</p>
-          <p className="text-2xl font-black" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(card.balance)}</p>
+          <p className="text-white/60 text-xs mb-1">Balance</p>
+          <p className="text-2xl font-black font-heading">{fmt(card.balance)}</p>
         </div>
         <Wifi size={22} className="text-white/70 rotate-90" />
       </div>
@@ -61,8 +61,8 @@ function CardVisual({ card }: { card: UserCard }) {
           •••• •••• •••• {card.lastFour}
         </p>
         <div className="flex items-end justify-between">
-          <p className="text-white/80 text-sm font-semibold" style={{ fontFamily: 'Nunito, sans-serif' }}>{card.name}</p>
-          <p className="text-white/60 text-xs uppercase font-bold" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+          <p className="text-white/80 text-sm font-semibold font-heading">{card.name}</p>
+          <p className="text-white/60 text-xs uppercase font-bold">
             {card.network === 'visa' ? 'VISA' : card.network === 'discover' ? 'DISCOVER' : card.network.toUpperCase()}
           </p>
         </div>
@@ -92,15 +92,15 @@ export function CreditCardsDashboard() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+          <h1 className="text-2xl font-black text-gray-800 font-heading">
             Your Credit Cards 💳
           </h1>
         </div>
         <div className="bg-white rounded-2xl p-12 shadow-sm border border-pink-50 flex flex-col items-center text-center gap-3">
           <span className="text-5xl">💳</span>
-          <h2 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>No cards added yet</h2>
-          <p className="text-gray-500 text-sm max-w-sm" style={{ fontFamily: 'DM Sans, sans-serif' }}>
-            You didn't add any credit cards during onboarding. You can re-visit your financial data from Settings.
+          <h2 className="text-xl font-bold text-gray-800 font-heading">No cards added yet</h2>
+          <p className="text-gray-500 text-sm max-w-sm">
+            You didn&apos;t add any credit cards during onboarding. You can re-visit your financial data from Settings.
           </p>
         </div>
       </div>
@@ -116,10 +116,10 @@ export function CreditCardsDashboard() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+        <h1 className="text-2xl font-black text-gray-800 font-heading">
           Your Credit Cards 💳
         </h1>
-        <p className="text-gray-500 text-sm mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+        <p className="text-gray-500 text-sm mt-1">
           Managing {cards.length} card{cards.length !== 1 ? 's' : ''} — {overallUtil.toFixed(1)}% overall utilization
         </p>
       </div>
@@ -128,17 +128,17 @@ export function CreditCardsDashboard() {
       <div className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50">
         <div className="flex items-center justify-between mb-2">
           <div>
-            <p className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>Overall Credit Utilization</p>
-            <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+            <p className="font-bold text-gray-800 font-heading">Overall Credit Utilization</p>
+            <p className="text-xs text-gray-400">
               {fmt(totalBalance)} used of {fmt(totalLimit)} total limit
             </p>
           </div>
-          <div className={`text-2xl font-black ${overallUtil < 10 ? 'text-emerald-500' : overallUtil < 30 ? 'text-amber-500' : 'text-red-500'}`} style={{ fontFamily: 'Nunito, sans-serif' }}>
+          <div className={`text-2xl font-black ${overallUtil < 10 ? 'text-emerald-500' : overallUtil < 30 ? 'text-amber-500' : 'text-red-500'} font-heading`}>
             {overallUtil.toFixed(1)}%
           </div>
         </div>
         <UtilizationBar balance={totalBalance} limit={totalLimit} />
-        <p className={`text-xs font-medium mt-1 ${overallUtil < 10 ? 'text-emerald-500' : overallUtil < 30 ? 'text-amber-500' : 'text-red-500'}`} style={{ fontFamily: 'DM Sans, sans-serif' }}>
+        <p className={`text-xs font-medium mt-1 ${overallUtil < 10 ? 'text-emerald-500' : overallUtil < 30 ? 'text-amber-500' : 'text-red-500'}`}>
           {overallUtil < 10 ? 'Excellent — great for your credit score!' : overallUtil < 30 ? 'Good — aim for under 10% for best score impact' : 'High — try to pay down balances soon'}
         </p>
       </div>
@@ -179,13 +179,13 @@ export function CreditCardsDashboard() {
 
           {/* Card details */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-pink-50 space-y-4">
-            <h3 className="font-bold text-gray-800 text-lg" style={{ fontFamily: 'Nunito, sans-serif' }}>{card.name}</h3>
+            <h3 className="font-bold text-gray-800 text-lg font-heading">{card.name}</h3>
 
             {/* Balance/Limit */}
             <div>
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-500" style={{ fontFamily: 'DM Sans, sans-serif' }}>Balance</span>
-                <span className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                <span className="text-gray-500">Balance</span>
+                <span className="font-bold text-gray-800 font-heading">
                   {fmt(card.balance)} / {fmt(card.creditLimit)}
                 </span>
               </div>
@@ -199,20 +199,20 @@ export function CreditCardsDashboard() {
             {/* Stats */}
             <div className="grid grid-cols-2 gap-3">
               <div className="p-3 rounded-2xl bg-pink-50">
-                <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>APR</p>
-                <p className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{card.apr}%</p>
+                <p className="text-xs text-gray-400 mb-1">APR</p>
+                <p className="font-bold text-gray-800 font-heading">{card.apr}%</p>
               </div>
               <div className="p-3 rounded-2xl bg-purple-50">
-                <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Rewards</p>
-                <p className="font-bold text-gray-800 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>{card.rewards ?? 'N/A'}</p>
+                <p className="text-xs text-gray-400 mb-1">Rewards</p>
+                <p className="font-bold text-gray-800 text-sm font-heading">{card.rewards ?? 'N/A'}</p>
               </div>
               <div className="p-3 rounded-2xl bg-green-50">
-                <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Rewards Earned</p>
-                <p className="font-bold text-emerald-600" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(card.rewardsEarned)}</p>
+                <p className="text-xs text-gray-400 mb-1">Rewards Earned</p>
+                <p className="font-bold text-emerald-600 font-heading">{fmt(card.rewardsEarned)}</p>
               </div>
               <div className="p-3 rounded-2xl bg-amber-50">
-                <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Due Date</p>
-                <p className="font-bold text-amber-600 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                <p className="text-xs text-gray-400 mb-1">Due Date</p>
+                <p className="font-bold text-amber-600 text-sm font-heading">
                   {card.dueDate ? new Date(card.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Not set'}
                 </p>
               </div>
@@ -221,8 +221,8 @@ export function CreditCardsDashboard() {
             {/* Tip */}
             {card.balance > 0 && (
               <div className="p-3 rounded-2xl bg-pink-50 border border-pink-100">
-                <p className="text-xs text-pink-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>💡 Tip</p>
-                <p className="text-xs text-pink-600 font-medium" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+                <p className="text-xs text-pink-400 mb-1">💡 Tip</p>
+                <p className="text-xs text-pink-600 font-medium">
                   Always pay the full balance to avoid {card.apr}% interest!
                 </p>
               </div>
@@ -234,7 +234,7 @@ export function CreditCardsDashboard() {
       {/* All cards table */}
       <div className="bg-white rounded-2xl shadow-sm border border-pink-50 overflow-hidden">
         <div className="px-6 py-4 border-b border-pink-50">
-          <h3 className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>All Cards Overview</h3>
+          <h3 className="font-bold text-gray-800 font-heading">All Cards Overview</h3>
         </div>
         <div className="divide-y divide-pink-50">
           {cards.map(c => (
@@ -247,12 +247,12 @@ export function CreditCardsDashboard() {
                   {c.network.slice(0, 2).toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-700" style={{ fontFamily: 'DM Sans, sans-serif' }}>{c.name}</p>
+                  <p className="text-sm font-medium text-gray-700">{c.name}</p>
                   <p className="text-xs text-gray-400">···{c.lastFour} · {c.apr}% APR</p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-sm font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(c.balance)}</p>
+                <p className="text-sm font-bold text-gray-800 font-heading">{fmt(c.balance)}</p>
                 <p className="text-xs text-gray-400">of {fmt(c.creditLimit)}</p>
               </div>
             </div>

@@ -64,31 +64,31 @@ export default function SettingsPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>Settings</h1>
-        <p className="text-gray-500 text-sm mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Manage your account and preferences</p>
+        <h1 className="text-2xl font-black text-gray-800 font-heading">Settings</h1>
+        <p className="text-gray-500 text-sm mt-1">Manage your account and preferences</p>
       </div>
 
       {/* Profile */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-pink-50">
         <div className="flex items-center gap-3 mb-5">
           <User size={18} className="text-pink-500" />
-          <h2 className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>Profile</h2>
+          <h2 className="font-bold text-gray-800 font-heading">Profile</h2>
         </div>
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-pink-200 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #E91E8C, #7C3AED)' }}>
+          <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-pink-200 flex items-center justify-center bg-brand">
             {session?.user?.image ? (
               <Image src={session.user.image} alt="avatar" width={64} height={64} className="w-full h-full object-cover" />
             ) : (
-              <span className="text-white text-2xl font-black" style={{ fontFamily: 'Nunito, sans-serif' }}>
+              <span className="text-white text-2xl font-black font-heading">
                 {firstName.charAt(0).toUpperCase()}
               </span>
             )}
           </div>
           <div>
-            <p className="font-bold text-gray-800 text-lg" style={{ fontFamily: 'Nunito, sans-serif' }}>
+            <p className="font-bold text-gray-800 text-lg font-heading">
               {session?.user?.name ?? 'Maya Demo'}
             </p>
-            <p className="text-sm text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+            <p className="text-sm text-gray-400">
               {session?.user?.email ?? 'demo@mayas.app'}
             </p>
           </div>
@@ -100,12 +100,11 @@ export default function SettingsPage() {
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
             <Database size={18} className="text-purple-500" />
-            <h2 className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>My Financial Data</h2>
+            <h2 className="font-bold text-gray-800 font-heading">My Financial Data</h2>
           </div>
           <Link
             href="/data"
-            className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold text-white shadow-sm hover:shadow-md hover:scale-105 transition-all"
-            style={{ background: 'linear-gradient(135deg, #E91E8C, #7C3AED)', fontFamily: 'Nunito, sans-serif' }}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold text-white shadow-sm hover:shadow-md hover:scale-105 transition-all font-heading bg-brand"
           >
             ✏️ Edit data
           </Link>
@@ -115,36 +114,36 @@ export default function SettingsPage() {
             <div className="p-4 rounded-2xl bg-pink-50 border border-pink-100">
               <div className="flex items-center gap-2 mb-2">
                 <DollarSign size={15} className="text-pink-500" />
-                <p className="text-xs font-semibold text-gray-500" style={{ fontFamily: 'DM Sans, sans-serif' }}>Bank Balance</p>
+                <p className="text-xs font-semibold text-gray-500">Bank Balance</p>
               </div>
-              <p className="font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+              <p className="font-black text-gray-800 font-heading">
                 {dataSummary.bankBalance != null ? `$${dataSummary.bankBalance.toLocaleString('en-US', { minimumFractionDigits: 0 })}` : '—'}
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-purple-50 border border-purple-100">
               <div className="flex items-center gap-2 mb-2">
                 <TrendingUp size={15} className="text-purple-500" />
-                <p className="text-xs font-semibold text-gray-500" style={{ fontFamily: 'DM Sans, sans-serif' }}>Stocks</p>
+                <p className="text-xs font-semibold text-gray-500">Stocks</p>
               </div>
-              <p className="font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+              <p className="font-black text-gray-800 font-heading">
                 {dataSummary.stocks} position{dataSummary.stocks !== 1 ? 's' : ''}
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-pink-50 border border-pink-100">
               <div className="flex items-center gap-2 mb-2">
                 <CreditCard size={15} className="text-pink-500" />
-                <p className="text-xs font-semibold text-gray-500" style={{ fontFamily: 'DM Sans, sans-serif' }}>Credit Cards</p>
+                <p className="text-xs font-semibold text-gray-500">Credit Cards</p>
               </div>
-              <p className="font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+              <p className="font-black text-gray-800 font-heading">
                 {dataSummary.cards} card{dataSummary.cards !== 1 ? 's' : ''}
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-purple-50 border border-purple-100">
               <div className="flex items-center gap-2 mb-2">
                 <Landmark size={15} className="text-purple-500" />
-                <p className="text-xs font-semibold text-gray-500" style={{ fontFamily: 'DM Sans, sans-serif' }}>Bonds</p>
+                <p className="text-xs font-semibold text-gray-500">Bonds</p>
               </div>
-              <p className="font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+              <p className="font-black text-gray-800 font-heading">
                 {dataSummary.bonds} bond{dataSummary.bonds !== 1 ? 's' : ''}
               </p>
             </div>
@@ -160,19 +159,18 @@ export default function SettingsPage() {
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-pink-50">
         <div className="flex items-center gap-3 mb-5">
           <Bell size={18} className="text-pink-500" />
-          <h2 className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>Notifications</h2>
+          <h2 className="font-bold text-gray-800 font-heading">Notifications</h2>
         </div>
         <div className="space-y-4">
           {notificationSettings.map(s => (
             <div key={s.id} className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-gray-700" style={{ fontFamily: 'Nunito, sans-serif' }}>{s.label}</p>
-                <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>{s.desc}</p>
+                <p className="text-sm font-semibold text-gray-700 font-heading">{s.label}</p>
+                <p className="text-xs text-gray-400">{s.desc}</p>
               </div>
               <button
                 onClick={() => setNotifications(n => ({ ...n, [s.id]: !n[s.id] }))}
-                className={`relative w-11 h-6 rounded-full transition-colors ${notifications[s.id] ? '' : 'bg-gray-200'}`}
-                style={notifications[s.id] ? { background: 'linear-gradient(135deg, #E91E8C, #7C3AED)' } : {}}
+                className={`relative w-11 h-6 rounded-full transition-colors ${notifications[s.id] ? 'bg-brand' : 'bg-gray-200'}`}
               >
                 <span
                   className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform ${notifications[s.id] ? 'translate-x-5' : 'translate-x-0.5'}`}
@@ -187,7 +185,7 @@ export default function SettingsPage() {
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-pink-50">
         <div className="flex items-center gap-3 mb-5">
           <GraduationCap size={18} className="text-purple-500" />
-          <h2 className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>Course Progress</h2>
+          <h2 className="font-bold text-gray-800 font-heading">Course Progress</h2>
         </div>
         <div className="grid grid-cols-2 gap-3">
           {courses.map(course => {
@@ -199,8 +197,8 @@ export default function SettingsPage() {
               >
                 <span className="text-2xl">{course.icon}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-gray-700 truncate" style={{ fontFamily: 'Nunito, sans-serif' }}>{course.label}</p>
-                  <p className={`text-xs font-semibold ${completed ? 'text-emerald-500' : 'text-gray-400'}`} style={{ fontFamily: 'DM Sans, sans-serif' }}>
+                  <p className="text-sm font-semibold text-gray-700 truncate font-heading">{course.label}</p>
+                  <p className={`text-xs font-semibold ${completed ? 'text-emerald-500' : 'text-gray-400'}`}>
                     {completed ? 'Completed ✓' : 'Not started'}
                   </p>
                 </div>
@@ -209,7 +207,7 @@ export default function SettingsPage() {
             )
           })}
         </div>
-        <p className="text-xs text-gray-400 text-center mt-4" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+        <p className="text-xs text-gray-400 text-center mt-4">
           {Object.values(courseStatuses).filter(Boolean).length} of {courses.length} courses completed
         </p>
       </div>
@@ -218,8 +216,7 @@ export default function SettingsPage() {
       <div className="bg-white rounded-2xl p-4 shadow-sm border border-pink-50">
         <button
           onClick={() => signOut({ callbackUrl: '/' })}
-          className="flex items-center gap-3 w-full px-2 py-2 rounded-xl text-red-400 hover:bg-red-50 transition-colors text-sm font-semibold"
-          style={{ fontFamily: 'Nunito, sans-serif' }}
+          className="flex items-center gap-3 w-full px-2 py-2 rounded-xl text-red-400 hover:bg-red-50 transition-colors text-sm font-semibold font-heading"
         >
           <LogOut size={16} />
           Sign out

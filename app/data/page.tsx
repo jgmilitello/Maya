@@ -28,9 +28,9 @@ const blankBond = (): BondRow => ({ name: '', type: 'treasury', faceValue: '', c
 function Field({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) {
   return (
     <div>
-      <label className="block text-xs font-semibold text-gray-500 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>{label}</label>
+      <label className="block text-xs font-semibold text-gray-500 mb-1">{label}</label>
       {children}
-      {hint && <p className="text-xs text-gray-400 mt-0.5" style={{ fontFamily: 'DM Sans, sans-serif' }}>{hint}</p>}
+      {hint && <p className="text-xs text-gray-400 mt-0.5">{hint}</p>}
     </div>
   )
 }
@@ -40,7 +40,6 @@ function Input({ className = '', ...props }: React.InputHTMLAttributes<HTMLInput
     <input
       {...props}
       className={`w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-100 transition-colors ${className}`}
-      style={{ fontFamily: 'DM Sans, sans-serif' }}
     />
   )
 }
@@ -50,7 +49,6 @@ function Select({ className = '', ...props }: React.SelectHTMLAttributes<HTMLSel
     <select
       {...props}
       className={`w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-pink-400 transition-colors bg-white ${className}`}
-      style={{ fontFamily: 'DM Sans, sans-serif' }}
     />
   )
 }
@@ -64,8 +62,8 @@ function StepAccounts({ bankBalance, setBankBalance, monthlyIncome, setMonthlyIn
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-black text-gray-800 mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>Bank & Income</h2>
-        <p className="text-sm text-gray-500" style={{ fontFamily: 'DM Sans, sans-serif' }}>Update your checking account balance and monthly take-home income.</p>
+        <h2 className="text-xl font-black text-gray-800 mb-1 font-heading">Bank & Income</h2>
+        <p className="text-sm text-gray-500">Update your checking account balance and monthly take-home income.</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field label="Checking / Savings Balance ($)">
@@ -86,8 +84,8 @@ function StepStocks({ rows, setRows }: { rows: StockRow[]; setRows: (r: StockRow
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-black text-gray-800 mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>Stock Holdings</h2>
-        <p className="text-sm text-gray-500" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+        <h2 className="text-xl font-black text-gray-800 mb-1 font-heading">Stock Holdings</h2>
+        <p className="text-sm text-gray-500">
           {rows.length === 0 ? 'No stocks yet. Add positions below, or leave empty if you don\'t hold stocks.' : 'Update your current stock positions.'}
         </p>
       </div>
@@ -124,8 +122,8 @@ function StepCards({ rows, setRows }: { rows: CardRow[]; setRows: (r: CardRow[])
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-black text-gray-800 mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>Credit Cards</h2>
-        <p className="text-sm text-gray-500" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+        <h2 className="text-xl font-black text-gray-800 mb-1 font-heading">Credit Cards</h2>
+        <p className="text-sm text-gray-500">
           {rows.length === 0 ? 'No cards yet. Add your credit cards below, or leave empty.' : 'Update your credit card details.'}
         </p>
       </div>
@@ -168,8 +166,8 @@ function StepBonds({ rows, setRows }: { rows: BondRow[]; setRows: (r: BondRow[])
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-black text-gray-800 mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>Bonds</h2>
-        <p className="text-sm text-gray-500" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+        <h2 className="text-xl font-black text-gray-800 mb-1 font-heading">Bonds</h2>
+        <p className="text-sm text-gray-500">
           {rows.length === 0 ? 'No bonds yet. Add any bond holdings below, or leave empty.' : 'Update your bond holdings.'}
         </p>
       </div>
@@ -355,14 +353,12 @@ export default function EditDataPage() {
     )
   }
 
-  const CurrentIcon = STEPS[step].icon
-
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>Edit My Financial Data ✏️</h1>
-        <p className="text-gray-500 text-sm mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Update any of your numbers — changes save immediately.</p>
+        <h1 className="text-2xl font-black text-gray-800 font-heading">Edit My Financial Data ✏️</h1>
+        <p className="text-gray-500 text-sm mt-1">Update any of your numbers — changes save immediately.</p>
       </div>
 
       {/* Step tabs */}
@@ -373,12 +369,11 @@ export default function EditDataPage() {
             <button
               key={s.id}
               onClick={() => setStep(i)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all font-heading ${
                 i === step
-                  ? 'text-white shadow-md'
+                  ? 'text-white shadow-md bg-brand'
                   : 'bg-white border border-pink-100 text-gray-500 hover:border-pink-300'
               }`}
-              style={i === step ? { background: 'linear-gradient(135deg, #E91E8C, #7C3AED)', fontFamily: 'Nunito, sans-serif' } : { fontFamily: 'Nunito, sans-serif' }}
             >
               <Icon size={14} />
               {s.label}
@@ -399,8 +394,7 @@ export default function EditDataPage() {
       <div className="flex items-center justify-between">
         <button
           onClick={() => step > 0 ? setStep(step - 1) : router.push('/settings')}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-pink-200 text-pink-600 text-sm font-semibold hover:bg-pink-50 transition-colors"
-          style={{ fontFamily: 'Nunito, sans-serif' }}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-pink-200 text-pink-600 text-sm font-semibold hover:bg-pink-50 transition-colors font-heading"
         >
           <ChevronLeft size={16} />
           {step === 0 ? 'Back to Settings' : 'Previous'}
@@ -410,8 +404,7 @@ export default function EditDataPage() {
           {step < STEPS.length - 1 && (
             <button
               onClick={() => setStep(step + 1)}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-pink-200 text-pink-600 text-sm font-semibold hover:bg-pink-50 transition-colors"
-              style={{ fontFamily: 'Nunito, sans-serif' }}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-pink-200 text-pink-600 text-sm font-semibold hover:bg-pink-50 transition-colors font-heading"
             >
               Next
               <ChevronRight size={16} />
@@ -420,8 +413,7 @@ export default function EditDataPage() {
           <button
             onClick={handleSave}
             disabled={saving || saved}
-            className="flex items-center gap-2 px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-md hover:shadow-lg hover:scale-105 transition-all disabled:opacity-70 disabled:scale-100"
-            style={{ background: saved ? '#10B981' : 'linear-gradient(135deg, #E91E8C, #7C3AED)', fontFamily: 'Nunito, sans-serif' }}
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-md hover:shadow-lg hover:scale-105 transition-all disabled:opacity-70 disabled:scale-100 font-heading ${saved ? 'bg-emerald-500' : 'bg-brand'}`}
           >
             {saved ? <><Check size={16} /> Saved!</> : saving ? 'Saving…' : '💾 Save Changes'}
           </button>

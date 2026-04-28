@@ -27,8 +27,7 @@ export default function StocksPage() {
         <div className="flex justify-end">
           <button
             onClick={() => setShowLesson(false)}
-            className="flex items-center gap-2 px-4 py-2 rounded-full border border-pink-200 text-pink-600 text-sm font-semibold hover:bg-pink-50 transition-colors"
-            style={{ fontFamily: 'Nunito, sans-serif' }}
+            className="flex items-center gap-2 px-4 py-2 rounded-full border border-pink-200 text-pink-600 text-sm font-semibold hover:bg-pink-50 transition-colors font-heading"
           >
             <X size={14} /> Close lesson
           </button>
@@ -64,8 +63,7 @@ export default function StocksPage() {
       <div className="flex justify-end">
         <button
           onClick={() => setShowLesson(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-full border border-purple-200 text-purple-600 text-sm font-semibold hover:bg-purple-50 transition-colors"
-          style={{ fontFamily: 'Nunito, sans-serif' }}
+          className="flex items-center gap-2 px-4 py-2 rounded-full border border-purple-200 text-purple-600 text-sm font-semibold hover:bg-purple-50 transition-colors font-heading"
         >
           <BookOpen size={14} />
           Review lesson
