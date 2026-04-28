@@ -5,6 +5,7 @@ import { CourseFlow } from '@/src/components/CourseFlow'
 import { stocksCourse, stocksQuiz } from '@/src/lib/courses'
 import { StockDashboard } from '@/src/components/stocks/StockDashboard'
 import { BookOpen, X } from 'lucide-react'
+import { LoadingSpinner } from '@/src/components/ui/LoadingSpinner'
 
 export default function StocksPage() {
   const [courseStatus, setCourseStatus] = useState<'loading' | 'needed' | 'done'>('loading')
@@ -17,17 +18,7 @@ export default function StocksPage() {
       .catch(() => setCourseStatus('needed'))
   }, [])
 
-  if (courseStatus === 'loading') {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="flex gap-1">
-          {[0, 1, 2].map(i => (
-            <div key={i} className="w-2 h-2 rounded-full bg-pink-400 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
-          ))}
-        </div>
-      </div>
-    )
-  }
+  if (courseStatus === 'loading') return <LoadingSpinner className="min-h-[60vh]" />
 
   // Show lesson inline when re-opening it
   if (showLesson) {

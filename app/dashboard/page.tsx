@@ -5,14 +5,7 @@ import { prisma } from '@/src/lib/prisma'
 import { NetWorthChart } from '@/src/components/ui/NetWorthChart'
 import { FinancialHealthScore } from '@/src/components/ui/FinancialHealthScore'
 import { TrendingUp, TrendingDown, CreditCard, PiggyBank, Wallet, ArrowUpRight, ArrowDownRight } from 'lucide-react'
-
-function fmt(n: number, opts?: { compact?: boolean; showSign?: boolean }) {
-  const sign = opts?.showSign && n > 0 ? '+' : ''
-  if (opts?.compact && Math.abs(n) >= 1000) {
-    return `${sign}$${(Math.abs(n) / 1000).toFixed(1)}K`
-  }
-  return `${sign}$${Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-}
+import { fmt } from '@/src/lib/format'
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -80,7 +73,7 @@ export default async function DashboardPage() {
           {totalPortfolioValue > 0 && (
             <div className={`flex items-center gap-1 text-sm font-semibold mb-1 ${portfolioTodayChange >= 0 ? 'text-green-300' : 'text-red-300'}`}>
               {portfolioTodayChange >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
-              <span>{fmt(portfolioTodayChange, { showSign: true })} today</span>
+              <span>{fmt(portfolioTodayChange, { sign: true })} today</span>
             </div>
           )}
         </div>
@@ -114,7 +107,7 @@ export default async function DashboardPage() {
           </p>
           {stocks.length > 0 && portfolioTodayChange !== 0 && (
             <p className={`text-xs mt-1 font-medium ${portfolioTodayChange >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
-              {fmt(portfolioTodayChange, { showSign: true })} today
+              {fmt(portfolioTodayChange, { sign: true })} today
             </p>
           )}
           {stocks.length === 0 && (

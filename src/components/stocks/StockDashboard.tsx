@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { PortfolioChart } from './PortfolioChart'
 import { ArrowUpRight, ArrowDownRight } from 'lucide-react'
+import { fmt } from '@/src/lib/format'
+import { LoadingSpinner } from '@/src/components/ui/LoadingSpinner'
 
 interface UserStock {
   id: string
@@ -12,15 +14,6 @@ interface UserStock {
   costBasisPerShare: number | null
   currentPrice: number
   todayChangePct: number
-}
-
-function fmt(n: number | null, opts?: { sign?: boolean; compact?: boolean; pct?: boolean }) {
-  if (n === null) return '—'
-  if (opts?.pct) return `${n >= 0 && opts?.sign ? '+' : ''}${n.toFixed(2)}%`
-  const sign = opts?.sign && n > 0 ? '+' : n < 0 ? '-' : ''
-  const abs = Math.abs(n)
-  if (opts?.compact && abs >= 1000) return `${sign}$${(abs / 1000).toFixed(1)}K`
-  return `${sign}$${abs.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
 export function StockDashboard() {
@@ -37,17 +30,7 @@ export function StockDashboard() {
       .catch(() => setLoading(false))
   }, [])
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[40vh]">
-        <div className="flex gap-1">
-          {[0, 1, 2].map(i => (
-            <div key={i} className="w-2 h-2 rounded-full bg-pink-400 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
-          ))}
-        </div>
-      </div>
-    )
-  }
+  if (loading) return <LoadingSpinner />
 
   // Computed values
   const totalPortfolioValue = stocks.reduce((s, st) => s + st.shares * st.currentPrice, 0)

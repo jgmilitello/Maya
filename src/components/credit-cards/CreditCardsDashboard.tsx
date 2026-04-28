@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Wifi } from 'lucide-react'
+import { fmt } from '@/src/lib/format'
+import { LoadingSpinner } from '@/src/components/ui/LoadingSpinner'
 
 interface UserCard {
   id: string
@@ -14,10 +16,6 @@ interface UserCard {
   rewards: string | null
   rewardsEarned: number
   dueDate: string | null
-}
-
-function fmt(n: number) {
-  return `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
 function getCardGradient(network: string): { from: string; to: string } {
@@ -88,17 +86,7 @@ export function CreditCardsDashboard() {
       .catch(() => setLoading(false))
   }, [])
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[40vh]">
-        <div className="flex gap-1">
-          {[0, 1, 2].map(i => (
-            <div key={i} className="w-2 h-2 rounded-full bg-pink-400 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
-          ))}
-        </div>
-      </div>
-    )
-  }
+  if (loading) return <LoadingSpinner />
 
   if (cards.length === 0) {
     return (

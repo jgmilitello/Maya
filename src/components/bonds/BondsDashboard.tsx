@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 import { ArrowUpRight } from 'lucide-react'
+import { fmt } from '@/src/lib/format'
+import { LoadingSpinner } from '@/src/components/ui/LoadingSpinner'
 
 interface UserBond {
   id: string
@@ -13,10 +15,6 @@ interface UserBond {
   maturityDate: string
   currentValue: number
   issuer: string | null
-}
-
-function fmt(n: number) {
-  return `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
 const TYPE_CONFIG: Record<string, { label: string; color: string; bg: string; text: string; icon: string }> = {
@@ -43,17 +41,7 @@ export function BondsDashboard() {
       .catch(() => setLoading(false))
   }, [])
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[40vh]">
-        <div className="flex gap-1">
-          {[0, 1, 2].map(i => (
-            <div key={i} className="w-2 h-2 rounded-full bg-pink-400 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
-          ))}
-        </div>
-      </div>
-    )
-  }
+  if (loading) return <LoadingSpinner />
 
   if (bonds.length === 0) {
     return (

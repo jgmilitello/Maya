@@ -7,15 +7,11 @@ import {
   CATEGORY_BUDGETS,
   CATEGORY_COLORS,
   CATEGORY_ICONS,
-  getBudgetSpending,
   type MockTransaction,
 } from '@/src/lib/mock-data'
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
 import { Plus, X, Search, Lightbulb } from 'lucide-react'
-
-function fmt(n: number) {
-  return `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-}
+import { fmt } from '@/src/lib/format'
 
 interface AddTxnModalProps {
   onClose: () => void

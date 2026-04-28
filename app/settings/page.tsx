@@ -28,7 +28,6 @@ export default function SettingsPage() {
   const [notifications, setNotifications] = useState<Record<string, boolean>>({
     weekly: true, budget: true, credit: true, portfolio: false,
   })
-  const [toast, setToast] = useState(false)
   const [dataSummary, setDataSummary] = useState<DataSummary | null>(null)
 
   useEffect(() => {
@@ -60,22 +59,10 @@ export default function SettingsPage() {
     }).catch(() => {})
   }, [])
 
-  function showToast() {
-    setToast(true)
-    setTimeout(() => setToast(false), 2500)
-  }
-
   const firstName = session?.user?.name?.split(' ')[0] ?? 'there'
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      {/* Toast */}
-      {toast && (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-white border border-pink-200 shadow-lg rounded-2xl px-5 py-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
-          <span>✨</span> Coming soon!
-        </div>
-      )}
-
       <div>
         <h1 className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>Settings</h1>
         <p className="text-gray-500 text-sm mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Manage your account and preferences</p>
