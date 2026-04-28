@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { CourseFlow } from '@/src/components/CourseFlow'
-import { budgetingCourse } from '@/src/lib/courses'
+import { budgetingCourse, budgetingQuiz } from '@/src/lib/courses'
 import { BudgetingDashboard } from '@/src/components/budgeting/BudgetingDashboard'
 
 export default function BudgetingPage() {
@@ -33,6 +33,7 @@ export default function BudgetingPage() {
         courseId="budgeting"
         courseName="Budgeting"
         steps={budgetingCourse}
+        quiz={budgetingQuiz}
         onComplete={() => setCourseStatus('done')}
       />
     )

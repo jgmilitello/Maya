@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { CourseFlow } from '@/src/components/CourseFlow'
-import { creditCardsCourse } from '@/src/lib/courses'
+import { creditCardsCourse, creditCardsQuiz } from '@/src/lib/courses'
 import { CreditCardsDashboard } from '@/src/components/credit-cards/CreditCardsDashboard'
 
 export default function CreditCardsPage() {
@@ -33,6 +33,7 @@ export default function CreditCardsPage() {
         courseId="credit-cards"
         courseName="Credit Cards"
         steps={creditCardsCourse}
+        quiz={creditCardsQuiz}
         onComplete={() => setCourseStatus('done')}
       />
     )

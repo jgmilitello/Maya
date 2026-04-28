@@ -3,6 +3,7 @@ import { authOptions } from '@/src/lib/auth'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/src/lib/prisma'
 import { NetWorthChart } from '@/src/components/ui/NetWorthChart'
+import { FinancialHealthScore } from '@/src/components/ui/FinancialHealthScore'
 import { TrendingUp, TrendingDown, CreditCard, PiggyBank, Wallet, ArrowUpRight, ArrowDownRight } from 'lucide-react'
 
 function fmt(n: number, opts?: { compact?: boolean; showSign?: boolean }) {
@@ -88,6 +89,9 @@ export default async function DashboardPage() {
         </p>
         <NetWorthChart />
       </div>
+
+      {/* Financial Health Score */}
+      <FinancialHealthScore />
 
       {/* Quick stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

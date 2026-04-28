@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { CourseFlow } from '@/src/components/CourseFlow'
-import { stocksCourse } from '@/src/lib/courses'
+import { stocksCourse, stocksQuiz } from '@/src/lib/courses'
 import { StockDashboard } from '@/src/components/stocks/StockDashboard'
 import { BookOpen, X } from 'lucide-react'
 
@@ -46,6 +46,7 @@ export default function StocksPage() {
           courseId="stocks"
           courseName="Stocks"
           steps={stocksCourse}
+          quiz={stocksQuiz}
           onComplete={() => { setCourseStatus('done'); setShowLesson(false) }}
         />
       </div>
@@ -59,6 +60,7 @@ export default function StocksPage() {
         courseId="stocks"
         courseName="Stocks"
         steps={stocksCourse}
+        quiz={stocksQuiz}
         onComplete={() => setCourseStatus('done')}
       />
     )

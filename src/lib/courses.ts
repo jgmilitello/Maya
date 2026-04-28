@@ -1,4 +1,4 @@
-import type { CourseStep } from '@/src/components/CourseFlow'
+import type { CourseStep, QuizQuestion } from '@/src/components/CourseFlow'
 
 export const stocksCourse: CourseStep[] = [
   {
@@ -33,9 +33,51 @@ export const stocksCourse: CourseStep[] = [
   },
   {
     icon: '🎉',
-    title: "You're ready to invest!",
-    content: "You now understand the basics of stocks — what they are, why people buy them, how to think about the ups and downs, and the importance of diversification. Your portfolio is waiting. Let's see how your investments are doing!",
+    title: "You're almost ready to invest!",
+    content: "You now understand the basics of stocks — what they are, why people buy them, how to think about the ups and downs, and the importance of diversification. One quick quiz and your portfolio is waiting!",
     fun: "The best time to start investing was yesterday. The second best time is today. You're already here!",
+  },
+]
+
+export const stocksQuiz: QuizQuestion[] = [
+  {
+    question: 'What does owning a stock actually mean?',
+    options: [
+      "You're lending money to a company",
+      "You own a small piece of the company",
+      "You're guaranteed to make money",
+      'You can vote on all company decisions',
+    ],
+    correct: 1,
+    explanation: "A stock represents partial ownership. When a company grows, your piece grows with it!",
+  },
+  {
+    question: 'What has the US stock market historically returned per year on average?',
+    options: ['2–3%', '5–6%', '~10%', '20–25%'],
+    correct: 2,
+    explanation: "The S&P 500 has returned ~10% annually on average — much better than a savings account.",
+  },
+  {
+    question: 'What should you do when the market drops significantly?',
+    options: [
+      'Sell everything immediately',
+      'Panic and move to cash',
+      'Stay calm and resist selling',
+      'Stop investing entirely',
+    ],
+    correct: 2,
+    explanation: "Every market crash in history was followed by a full recovery. Panic-selling locks in your losses.",
+  },
+  {
+    question: 'What is an index fund?',
+    options: [
+      'A single stock that tracks inflation',
+      'A government savings account',
+      'A type of high-risk bond',
+      'A fund that tracks a market index like the S&P 500',
+    ],
+    correct: 3,
+    explanation: "Index funds instantly diversify you across hundreds of companies with low fees — a beginner's best friend.",
   },
 ]
 
@@ -72,9 +114,46 @@ export const creditCardsCourse: CourseStep[] = [
   },
   {
     icon: '🌟',
-    title: "You're a credit card pro!",
-    content: "You now know how to use credit cards the smart way — pay in full every month, keep utilization low, and let your score grow. Plus you'll be earning rewards on purchases you were already going to make! Let's take a look at your cards.",
+    title: "Almost done — quiz time!",
+    content: "You now know how to use credit cards the smart way — pay in full every month, keep utilization low, and let your score grow. Answer 4 quick questions to prove it and unlock your dashboard!",
     fun: "Used correctly, credit card rewards are basically free money. Some people earn $1,000+ per year in cashback!",
+  },
+]
+
+export const creditCardsQuiz: QuizQuestion[] = [
+  {
+    question: "What is the golden rule of credit cards?",
+    options: [
+      'Only use them for emergencies',
+      'Pay the minimum balance each month',
+      'Pay your full statement balance every month',
+      'Never carry more than 1 card',
+    ],
+    correct: 2,
+    explanation: "Paying in full every month means you pay zero interest — the bank literally pays YOU in rewards.",
+  },
+  {
+    question: 'What credit utilization rate is best for your credit score?',
+    options: ['Under 50%', 'Under 30%', 'Under 10%', 'It doesn\'t matter'],
+    correct: 2,
+    explanation: "Under 10% is ideal. Lenders see low utilization as a sign you manage credit responsibly.",
+  },
+  {
+    question: 'What does APR stand for?',
+    options: [
+      'Annual Payment Rate',
+      'Average Purchase Return',
+      'Annual Percentage Rate',
+      'Adjusted Principal Rate',
+    ],
+    correct: 2,
+    explanation: "APR is the yearly interest rate charged on unpaid balances — typically 20–30% on credit cards.",
+  },
+  {
+    question: 'What credit score range gets you the best loan rates?',
+    options: ['500–600', '600–700', '700–750', '750 and above'],
+    correct: 3,
+    explanation: "Above 750 is considered excellent. It can save you tens of thousands on a mortgage!",
   },
 ]
 
@@ -105,9 +184,51 @@ export const bondsCourse: CourseStep[] = [
   },
   {
     icon: '💎',
-    title: "You understand bonds!",
-    content: "Bonds might seem boring, but they're a crucial part of a balanced portfolio. They provide steady income, protect against stock market crashes, and help you sleep at night. Let's see your bond portfolio!",
+    title: "Almost there — quiz time!",
+    content: "Bonds might seem boring, but they're a crucial part of a balanced portfolio. They provide steady income and protect against stock market crashes. Answer 4 questions to unlock your bond portfolio!",
     fun: "Warren Buffett's company Berkshire Hathaway holds billions in bonds as a safety cushion — even the greatest investor loves stability.",
+  },
+]
+
+export const bondsQuiz: QuizQuestion[] = [
+  {
+    question: 'When you buy a bond, you are:',
+    options: [
+      'Buying ownership in a company',
+      'Lending money to a company or government',
+      'Getting a guaranteed stock market return',
+      'Opening a special savings account',
+    ],
+    correct: 1,
+    explanation: "Bonds are loans. You're the lender, and the company or government pays you interest for borrowing.",
+  },
+  {
+    question: 'Compared to stocks, bonds typically offer:',
+    options: [
+      'Higher returns and higher risk',
+      'Lower returns and lower risk',
+      'Higher returns and lower risk',
+      'The same risk and return',
+    ],
+    correct: 1,
+    explanation: "Bonds are the stability layer of a portfolio — lower risk, lower reward, but predictable income.",
+  },
+  {
+    question: "What is a bond's 'coupon rate'?",
+    options: [
+      'A discount you get when buying the bond',
+      'The fee the broker charges',
+      'The annual interest rate the bond pays',
+      'The rate at which the bond matures',
+    ],
+    correct: 2,
+    explanation: "The coupon rate is the fixed annual interest payment — like your return for lending the money.",
+  },
+  {
+    question: 'When interest rates rise, bond prices generally:',
+    options: ['Rise too', 'Stay the same', 'Fall', 'Double'],
+    correct: 2,
+    explanation: "Rates and bond prices move in opposite directions — a key concept for bond investing!",
   },
 ]
 
@@ -144,8 +265,45 @@ export const budgetingCourse: CourseStep[] = [
   },
   {
     icon: '✨',
-    title: "You're ready to budget!",
-    content: "You've got the mindset and the framework. Now let's set up your budget and start seeing exactly where your money is going. You're about to feel so much more in control of your finances!",
+    title: "One quick quiz and you're in!",
+    content: "You've got the mindset and the framework. Prove it with 4 questions and unlock your budget dashboard. You're about to feel so much more in control of your finances!",
     fun: "Budgeting isn't a diet for your money — it's more like a GPS. You're still in charge of the destination.",
+  },
+]
+
+export const budgetingQuiz: QuizQuestion[] = [
+  {
+    question: "In the 50/30/20 rule, what does the 20% represent?",
+    options: [
+      'Dining and entertainment',
+      'Housing and rent',
+      'Clothing and shopping',
+      'Savings and debt payoff',
+    ],
+    correct: 3,
+    explanation: "The 20% covers your emergency fund, debt repayment, and investing — the most important slice!",
+  },
+  {
+    question: 'What is the real purpose of budgeting?',
+    options: [
+      'Restricting yourself from spending',
+      'Saving every possible dollar',
+      'Being intentional about where your money goes',
+      'Avoiding all debt forever',
+    ],
+    correct: 2,
+    explanation: "Budgeting is about awareness and intention — not deprivation. You choose where your money goes.",
+  },
+  {
+    question: 'How much more do people who track spending save per month on average?',
+    options: ['$50 more', '$200 more', '$500 more', '$1,000 more'],
+    correct: 2,
+    explanation: "Studies show $500/month more — just from the awareness that tracking creates. Knowledge is power!",
+  },
+  {
+    question: 'How often should you review your budget?',
+    options: ['Only when you overspend', 'Once a year', 'Every day', 'Monthly'],
+    correct: 3,
+    explanation: "A monthly 10-minute review lets you spot patterns and adjust — it's the habit that makes it work.",
   },
 ]
