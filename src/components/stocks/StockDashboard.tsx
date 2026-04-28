@@ -1,14 +1,18 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import { PortfolioChart } from './PortfolioChart'
-import {
-  mockStockHoldings,
-  INVESTMENT_ACCOUNT_VALUE,
-  TOTAL_PORTFOLIO_VALUE,
-  PORTFOLIO_TODAY_CHANGE,
-  PORTFOLIO_TODAY_CHANGE_PCT,
-  CASH_BALANCE,
-  ROTH_IRA_VALUE,
-} from '@/src/lib/mock-data'
 import { ArrowUpRight, ArrowDownRight } from 'lucide-react'
+
+interface UserStock {
+  id: string
+  ticker: string
+  company: string
+  shares: number
+  costBasisPerShare: number | null
+  currentPrice: number
+  todayChangePct: number
+}
 
 function fmt(n: number | null, opts?: { sign?: boolean; compact?: boolean; pct?: boolean }) {
   if (n === null) return '—'
@@ -20,8 +24,59 @@ function fmt(n: number | null, opts?: { sign?: boolean; compact?: boolean; pct?:
 }
 
 export function StockDashboard() {
-  const totalTodayChange = PORTFOLIO_TODAY_CHANGE
-  const totalTodayPct = PORTFOLIO_TODAY_CHANGE_PCT
+  const [stocks, setStocks] = useState<UserStock[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/user/stocks')
+      .then(r => r.json())
+      .then(data => {
+        setStocks(data.stocks ?? [])
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[40vh]">
+        <div className="flex gap-1">
+          {[0, 1, 2].map(i => (
+            <div key={i} className="w-2 h-2 rounded-full bg-pink-400 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // Computed values
+  const totalPortfolioValue = stocks.reduce((s, st) => s + st.shares * st.currentPrice, 0)
+  const totalTodayChange = stocks.reduce((s, st) => {
+    return s + st.shares * st.currentPrice * (st.todayChangePct / 100)
+  }, 0)
+  const totalTodayPct = totalPortfolioValue > 0 ? (totalTodayChange / totalPortfolioValue) * 100 : 0
+
+  if (stocks.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+            Your Stock Portfolio 📈
+          </h1>
+          <p className="text-gray-500 text-sm mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+            All your holdings in one place
+          </p>
+        </div>
+        <div className="bg-white rounded-2xl p-12 shadow-sm border border-pink-50 flex flex-col items-center text-center gap-3">
+          <span className="text-5xl">📊</span>
+          <h2 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>No stocks added yet</h2>
+          <p className="text-gray-500 text-sm max-w-sm" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+            You didn't add any stock holdings during onboarding. You can re-visit your financial data from Settings.
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -31,18 +86,18 @@ export function StockDashboard() {
           Your Stock Portfolio 📈
         </h1>
         <p className="text-gray-500 text-sm mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>
-          All your holdings in one place
+          {stocks.length} position{stocks.length !== 1 ? 's' : ''} — all your holdings in one place
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left panel — Account breakdown */}
         <div className="lg:col-span-1 space-y-3">
-          {/* All accounts total */}
+          {/* Total portfolio */}
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50">
-            <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>All accounts</p>
+            <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Total Portfolio</p>
             <p className="text-2xl font-black text-gray-800 mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>
-              {fmt(TOTAL_PORTFOLIO_VALUE)}
+              {fmt(totalPortfolioValue)}
             </p>
             <div className={`flex items-center gap-1 text-sm font-semibold ${totalTodayChange >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
               {totalTodayChange >= 0 ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
@@ -50,48 +105,34 @@ export function StockDashboard() {
             </div>
           </div>
 
-          {/* Investment account */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50">
-            <div className="flex items-center justify-between mb-3">
-              <div>
-                <p className="text-xs font-semibold text-gray-600" style={{ fontFamily: 'Nunito, sans-serif' }}>Investment Account</p>
-                <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Brokerage ···1234</p>
+          {/* Per-stock account cards */}
+          {stocks.map(st => {
+            const value = st.shares * st.currentPrice
+            const dayChange = value * (st.todayChangePct / 100)
+            return (
+              <div key={st.id} className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <p className="text-xs font-semibold text-gray-600" style={{ fontFamily: 'Nunito, sans-serif' }}>{st.ticker}</p>
+                    <p className="text-xs text-gray-400 truncate max-w-[130px]" style={{ fontFamily: 'DM Sans, sans-serif' }}>{st.company}</p>
+                  </div>
+                  <span className="text-xs px-2 py-1 rounded-full bg-pink-50 text-pink-600 font-semibold">
+                    {st.shares >= 1 ? st.shares.toLocaleString() : st.shares.toFixed(3)} sh
+                  </span>
+                </div>
+                <p className="text-xl font-black text-gray-800 mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                  {fmt(value)}
+                </p>
+                <div className={`flex items-center gap-1 text-xs font-semibold ${dayChange >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+                  {dayChange >= 0 ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+                  {fmt(dayChange, { sign: true })} ({st.todayChangePct >= 0 ? '+' : ''}{st.todayChangePct.toFixed(2)}%) today
+                </div>
               </div>
-              <span className="text-xs px-2 py-1 rounded-full bg-pink-50 text-pink-600 font-semibold">Active</span>
-            </div>
-            <p className="text-xl font-black text-gray-800 mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>
-              {fmt(INVESTMENT_ACCOUNT_VALUE)}
-            </p>
-            <div className={`flex items-center gap-1 text-xs font-semibold ${totalTodayChange >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
-              {totalTodayChange >= 0 ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
-              {fmt(totalTodayChange, { sign: true })} today
-            </div>
-          </div>
-
-          {/* Roth IRA */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50">
-            <div className="flex items-center justify-between mb-3">
-              <div>
-                <p className="text-xs font-semibold text-gray-600" style={{ fontFamily: 'Nunito, sans-serif' }}>Roth IRA</p>
-                <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Retirement ···5678</p>
-              </div>
-              <span className="text-xs px-2 py-1 rounded-full bg-purple-50 text-purple-600 font-semibold">IRA</span>
-            </div>
-            <p className="text-xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
-              {fmt(ROTH_IRA_VALUE)}
-            </p>
-          </div>
-
-          {/* Cash */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50">
-            <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Cash (Money Market)</p>
-            <p className="text-xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
-              {fmt(CASH_BALANCE)}
-            </p>
-          </div>
+            )
+          })}
         </div>
 
-        {/* Right panel — Chart + Holdings */}
+        {/* Right panel — Chart + Holdings table */}
         <div className="lg:col-span-2 space-y-4">
           {/* Chart card */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-pink-50">
@@ -99,7 +140,7 @@ export function StockDashboard() {
               <div>
                 <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Portfolio Value</p>
                 <p className="text-3xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
-                  {fmt(INVESTMENT_ACCOUNT_VALUE)}
+                  {fmt(totalPortfolioValue)}
                 </p>
               </div>
               <div className={`flex items-center gap-1 text-sm font-semibold mb-1 ${totalTodayChange >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
@@ -119,59 +160,68 @@ export function StockDashboard() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-pink-50/50">
-                    {['Symbol', 'Last Price', "Today's +/-", 'Total +/-', 'Value', '% Acct', 'Shares', 'Cost Basis'].map(h => (
+                    {['Symbol', 'Last Price', "Today's +/-", 'Total +/-', 'Value', '% Portfolio', 'Shares', 'Cost Basis'].map(h => (
                       <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-400 whitespace-nowrap" style={{ fontFamily: 'DM Sans, sans-serif' }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {mockStockHoldings.map(h => (
-                    <tr key={h.ticker} className="border-t border-pink-50/50 hover:bg-pink-50/30 transition-colors">
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        <div>
-                          <p className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{h.ticker}</p>
-                          <p className="text-xs text-gray-400 max-w-[120px] truncate" style={{ fontFamily: 'DM Sans, sans-serif' }}>{h.company}</p>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        <p className="font-semibold text-gray-800">{fmt(h.currentPrice)}</p>
-                      </td>
-                      <td className={`px-4 py-3 whitespace-nowrap font-semibold ${h.todayChange >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
-                        <div>
-                          <p>{fmt(h.todayChange, { sign: true })}</p>
-                          <p className="text-xs">{h.todayChangePct >= 0 ? '+' : ''}{h.todayChangePct.toFixed(2)}%</p>
-                        </div>
-                      </td>
-                      <td className={`px-4 py-3 whitespace-nowrap font-semibold ${(h.totalGainLoss ?? 0) >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
-                        <div>
-                          <p>{fmt(h.totalGainLoss, { sign: true })}</p>
-                          <p className="text-xs">{h.totalGainLossPct !== null ? `${h.totalGainLossPct >= 0 ? '+' : ''}${h.totalGainLossPct.toFixed(2)}%` : '—'}</p>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
-                        {fmt(h.currentValue)}
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-gray-600">
-                        {h.percentOfAccount.toFixed(1)}%
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-gray-600">
-                        {h.shares >= 1 ? h.shares.toLocaleString() : h.shares.toFixed(3)}
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-gray-600">
-                        {h.costBasisTotal !== null ? fmt(h.costBasisTotal) : '—'}
-                        {h.costBasisPerShare !== null && (
-                          <p className="text-xs text-gray-400">{fmt(h.costBasisPerShare)}/sh</p>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                  {stocks.map(h => {
+                    const currentValue = h.shares * h.currentPrice
+                    const pctOfPortfolio = totalPortfolioValue > 0 ? (currentValue / totalPortfolioValue) * 100 : 0
+                    const dayChangeDollar = currentValue * (h.todayChangePct / 100)
+                    const costBasisTotal = h.costBasisPerShare !== null ? h.costBasisPerShare * h.shares : null
+                    const totalGainLoss = costBasisTotal !== null ? currentValue - costBasisTotal : null
+                    const totalGainLossPct = costBasisTotal !== null && costBasisTotal > 0 ? ((currentValue - costBasisTotal) / costBasisTotal) * 100 : null
+
+                    return (
+                      <tr key={h.id} className="border-t border-pink-50/50 hover:bg-pink-50/30 transition-colors">
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <div>
+                            <p className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{h.ticker}</p>
+                            <p className="text-xs text-gray-400 max-w-[120px] truncate" style={{ fontFamily: 'DM Sans, sans-serif' }}>{h.company}</p>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <p className="font-semibold text-gray-800">{fmt(h.currentPrice)}</p>
+                        </td>
+                        <td className={`px-4 py-3 whitespace-nowrap font-semibold ${dayChangeDollar >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+                          <div>
+                            <p>{fmt(dayChangeDollar, { sign: true })}</p>
+                            <p className="text-xs">{h.todayChangePct >= 0 ? '+' : ''}{h.todayChangePct.toFixed(2)}%</p>
+                          </div>
+                        </td>
+                        <td className={`px-4 py-3 whitespace-nowrap font-semibold ${(totalGainLoss ?? 0) >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+                          <div>
+                            <p>{fmt(totalGainLoss, { sign: true })}</p>
+                            <p className="text-xs">{totalGainLossPct !== null ? `${totalGainLossPct >= 0 ? '+' : ''}${totalGainLossPct.toFixed(2)}%` : '—'}</p>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                          {fmt(currentValue)}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                          {pctOfPortfolio.toFixed(1)}%
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                          {h.shares >= 1 ? h.shares.toLocaleString() : h.shares.toFixed(3)}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-gray-600">
+                          {costBasisTotal !== null ? fmt(costBasisTotal) : '—'}
+                          {h.costBasisPerShare !== null && (
+                            <p className="text-xs text-gray-400">{fmt(h.costBasisPerShare)}/sh</p>
+                          )}
+                        </td>
+                      </tr>
+                    )
+                  })}
                   {/* Total row */}
                   <tr className="border-t-2 border-pink-100 bg-pink-50/50">
                     <td className="px-4 py-3 font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }} colSpan={4}>
-                      Total (Investment Account)
+                      Total Portfolio
                     </td>
                     <td className="px-4 py-3 font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
-                      {fmt(INVESTMENT_ACCOUNT_VALUE)}
+                      {fmt(totalPortfolioValue)}
                     </td>
                     <td className="px-4 py-3 font-semibold text-gray-600">100%</td>
                     <td colSpan={2}></td>

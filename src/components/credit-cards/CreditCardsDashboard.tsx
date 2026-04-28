@@ -1,11 +1,33 @@
 'use client'
 
-import { useState } from 'react'
-import { mockCreditCards, type CreditCard } from '@/src/lib/mock-data'
+import { useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Wifi } from 'lucide-react'
+
+interface UserCard {
+  id: string
+  name: string
+  network: string
+  lastFour: string
+  balance: number
+  creditLimit: number
+  apr: number
+  rewards: string | null
+  rewardsEarned: number
+  dueDate: string | null
+}
 
 function fmt(n: number) {
   return `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+}
+
+function getCardGradient(network: string): { from: string; to: string } {
+  switch (network.toLowerCase()) {
+    case 'visa':        return { from: '#1A1F71', to: '#2563EB' }
+    case 'mastercard':  return { from: '#E91E8C', to: '#F59E0B' }
+    case 'amex':        return { from: '#006FCF', to: '#00A3E0' }
+    case 'discover':    return { from: '#F97316', to: '#EF4444' }
+    default:            return { from: '#7C3AED', to: '#E91E8C' }
+  }
 }
 
 function UtilizationBar({ balance, limit }: { balance: number; limit: number }) {
@@ -18,13 +40,13 @@ function UtilizationBar({ balance, limit }: { balance: number; limit: number }) 
   )
 }
 
-function CardVisual({ card }: { card: CreditCard }) {
+function CardVisual({ card }: { card: UserCard }) {
+  const grad = getCardGradient(card.network)
   return (
     <div
       className="relative rounded-3xl p-6 text-white shadow-xl w-full aspect-[1.6] flex flex-col justify-between overflow-hidden"
-      style={{ background: `linear-gradient(135deg, ${card.gradientFrom}, ${card.gradientTo})` }}
+      style={{ background: `linear-gradient(135deg, ${grad.from}, ${grad.to})` }}
     >
-      {/* Decorative circles */}
       <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-10 bg-white" />
       <div className="absolute -bottom-10 -left-5 w-32 h-32 rounded-full opacity-10 bg-white" />
 
@@ -52,12 +74,55 @@ function CardVisual({ card }: { card: CreditCard }) {
 }
 
 export function CreditCardsDashboard() {
+  const [cards, setCards] = useState<UserCard[]>([])
   const [activeIdx, setActiveIdx] = useState(0)
-  const card = mockCreditCards[activeIdx]
+  const [loading, setLoading] = useState(true)
 
-  const totalBalance = mockCreditCards.reduce((s, c) => s + c.balance, 0)
-  const totalLimit = mockCreditCards.reduce((s, c) => s + c.limit, 0)
-  const overallUtil = (totalBalance / totalLimit) * 100
+  useEffect(() => {
+    fetch('/api/user/credit-cards')
+      .then(r => r.json())
+      .then(data => {
+        setCards(data.cards ?? [])
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[40vh]">
+        <div className="flex gap-1">
+          {[0, 1, 2].map(i => (
+            <div key={i} className="w-2 h-2 rounded-full bg-pink-400 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (cards.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+            Your Credit Cards 💳
+          </h1>
+        </div>
+        <div className="bg-white rounded-2xl p-12 shadow-sm border border-pink-50 flex flex-col items-center text-center gap-3">
+          <span className="text-5xl">💳</span>
+          <h2 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>No cards added yet</h2>
+          <p className="text-gray-500 text-sm max-w-sm" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+            You didn't add any credit cards during onboarding. You can re-visit your financial data from Settings.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  const card = cards[Math.min(activeIdx, cards.length - 1)]
+  const totalBalance = cards.reduce((s, c) => s + c.balance, 0)
+  const totalLimit = cards.reduce((s, c) => s + c.creditLimit, 0)
+  const overallUtil = totalLimit > 0 ? (totalBalance / totalLimit) * 100 : 0
 
   return (
     <div className="space-y-6">
@@ -67,11 +132,11 @@ export function CreditCardsDashboard() {
           Your Credit Cards 💳
         </h1>
         <p className="text-gray-500 text-sm mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>
-          Managing {mockCreditCards.length} cards — {overallUtil.toFixed(1)}% overall utilization
+          Managing {cards.length} card{cards.length !== 1 ? 's' : ''} — {overallUtil.toFixed(1)}% overall utilization
         </p>
       </div>
 
-      {/* Overall utilization badge */}
+      {/* Overall utilization */}
       <div className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50">
         <div className="flex items-center justify-between mb-2">
           <div>
@@ -101,7 +166,7 @@ export function CreditCardsDashboard() {
             <ChevronLeft size={18} className="text-pink-500" />
           </button>
           <div className="flex gap-2">
-            {mockCreditCards.map((_, i) => (
+            {cards.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setActiveIdx(i)}
@@ -110,8 +175,8 @@ export function CreditCardsDashboard() {
             ))}
           </div>
           <button
-            onClick={() => setActiveIdx(i => Math.min(mockCreditCards.length - 1, i + 1))}
-            disabled={activeIdx === mockCreditCards.length - 1}
+            onClick={() => setActiveIdx(i => Math.min(cards.length - 1, i + 1))}
+            disabled={activeIdx === cards.length - 1}
             className="w-9 h-9 rounded-full flex items-center justify-center bg-white border border-pink-100 shadow-sm disabled:opacity-30 hover:bg-pink-50 transition-colors"
           >
             <ChevronRight size={18} className="text-pink-500" />
@@ -133,13 +198,13 @@ export function CreditCardsDashboard() {
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-gray-500" style={{ fontFamily: 'DM Sans, sans-serif' }}>Balance</span>
                 <span className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
-                  {fmt(card.balance)} / {fmt(card.limit)}
+                  {fmt(card.balance)} / {fmt(card.creditLimit)}
                 </span>
               </div>
-              <UtilizationBar balance={card.balance} limit={card.limit} />
+              <UtilizationBar balance={card.balance} limit={card.creditLimit} />
               <div className="flex justify-between text-xs text-gray-400 mt-1">
-                <span>{((card.balance / card.limit) * 100).toFixed(1)}% utilization</span>
-                <span>{fmt(card.limit - card.balance)} available</span>
+                <span>{card.creditLimit > 0 ? ((card.balance / card.creditLimit) * 100).toFixed(1) : 0}% utilization</span>
+                <span>{fmt(card.creditLimit - card.balance)} available</span>
               </div>
             </div>
 
@@ -151,7 +216,7 @@ export function CreditCardsDashboard() {
               </div>
               <div className="p-3 rounded-2xl bg-purple-50">
                 <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Rewards</p>
-                <p className="font-bold text-gray-800 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>{card.rewards}</p>
+                <p className="font-bold text-gray-800 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>{card.rewards ?? 'N/A'}</p>
               </div>
               <div className="p-3 rounded-2xl bg-green-50">
                 <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Rewards Earned</p>
@@ -160,18 +225,17 @@ export function CreditCardsDashboard() {
               <div className="p-3 rounded-2xl bg-amber-50">
                 <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Due Date</p>
                 <p className="font-bold text-amber-600 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>
-                  {new Date(card.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  {card.dueDate ? new Date(card.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Not set'}
                 </p>
               </div>
             </div>
 
-            {/* Min payment */}
-            {card.minPayment > 0 && (
-              <div className="p-3 rounded-2xl bg-red-50 border border-red-100">
-                <p className="text-xs text-red-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Minimum Payment</p>
-                <p className="font-bold text-red-600" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(card.minPayment)}</p>
-                <p className="text-xs text-red-400 mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>
-                  💡 Always pay the full balance to avoid interest!
+            {/* Tip */}
+            {card.balance > 0 && (
+              <div className="p-3 rounded-2xl bg-pink-50 border border-pink-100">
+                <p className="text-xs text-pink-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>💡 Tip</p>
+                <p className="text-xs text-pink-600 font-medium" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+                  Always pay the full balance to avoid {card.apr}% interest!
                 </p>
               </div>
             )}
@@ -179,26 +243,30 @@ export function CreditCardsDashboard() {
         </div>
       </div>
 
-      {/* Recent transactions */}
+      {/* All cards table */}
       <div className="bg-white rounded-2xl shadow-sm border border-pink-50 overflow-hidden">
         <div className="px-6 py-4 border-b border-pink-50">
-          <h3 className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
-            Recent Transactions — {card.name}
-          </h3>
+          <h3 className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>All Cards Overview</h3>
         </div>
         <div className="divide-y divide-pink-50">
-          {card.transactions.map(t => (
-            <div key={t.id} className="flex items-center justify-between px-6 py-4 hover:bg-pink-50/30 transition-colors">
+          {cards.map(c => (
+            <div key={c.id} className="flex items-center justify-between px-6 py-4 hover:bg-pink-50/30 transition-colors">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-pink-50 flex items-center justify-center text-base">
-                  {t.category === 'Groceries' ? '🛒' : t.category === 'Dining' ? '🍽️' : t.category === 'Shopping' ? '🛍️' : t.category === 'Gas' ? '⛽' : t.category === 'Subscriptions' ? '📱' : t.category === 'Transportation' ? '🚗' : t.category === 'Entertainment' ? '🎬' : t.category === 'Health' ? '💊' : '💳'}
+                <div
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center text-white text-xs font-bold"
+                  style={{ background: `linear-gradient(135deg, ${getCardGradient(c.network).from}, ${getCardGradient(c.network).to})` }}
+                >
+                  {c.network.slice(0, 2).toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-700" style={{ fontFamily: 'DM Sans, sans-serif' }}>{t.description}</p>
-                  <p className="text-xs text-gray-400">{t.category} · {new Date(t.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                  <p className="text-sm font-medium text-gray-700" style={{ fontFamily: 'DM Sans, sans-serif' }}>{c.name}</p>
+                  <p className="text-xs text-gray-400">···{c.lastFour} · {c.apr}% APR</p>
                 </div>
               </div>
-              <span className="text-sm font-bold text-red-500" style={{ fontFamily: 'Nunito, sans-serif' }}>-{fmt(t.amount)}</span>
+              <div className="text-right">
+                <p className="text-sm font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(c.balance)}</p>
+                <p className="text-xs text-gray-400">of {fmt(c.creditLimit)}</p>
+              </div>
             </div>
           ))}
         </div>

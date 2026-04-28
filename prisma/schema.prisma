@@ -33,19 +33,74 @@ model Session {
 }
 
 model User {
-  id                String             @id @default(cuid())
-  name              String?
-  email             String?            @unique
-  emailVerified     DateTime?
-  image             String?
-  accounts          Account[]
-  sessions          Session[]
-  transactions      Transaction[]
-  budgets           Budget[]
-  courseCompletions CourseCompletion[]
-  plaidItems        PlaidItem[]
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  id                  String               @id @default(cuid())
+  name                String?
+  email               String?              @unique
+  emailVerified       DateTime?
+  image               String?
+  accounts            Account[]
+  sessions            Session[]
+  transactions        Transaction[]
+  budgets             Budget[]
+  courseCompletions   CourseCompletion[]
+  plaidItems          PlaidItem[]
+  userStocks          UserStock[]
+  userCreditCards     UserCreditCard[]
+  userBonds           UserBond[]
+  financialProfile    UserFinancialProfile?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+}
+
+model UserFinancialProfile {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  monthlyIncome  Float?
+  bankBalance    Float?
+  onboardingDone Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User     @relation(fields: [userId], references: [id])
+}
+
+model UserStock {
+  id                String  @id @default(cuid())
+  userId            String
+  ticker            String
+  company           String
+  shares            Float
+  costBasisPerShare Float?
+  currentPrice      Float
+  todayChangePct    Float   @default(0)
+  user              User    @relation(fields: [userId], references: [id])
+}
+
+model UserCreditCard {
+  id           String  @id @default(cuid())
+  userId       String
+  name         String
+  network      String  @default("visa")
+  lastFour     String
+  balance      Float
+  creditLimit  Float
+  apr          Float
+  rewards      String?
+  rewardsEarned Float  @default(0)
+  dueDate      String?
+  user         User    @relation(fields: [userId], references: [id])
+}
+
+model UserBond {
+  id           String  @id @default(cuid())
+  userId       String
+  name         String
+  type         String  @default("treasury")
+  faceValue    Float
+  couponRate   Float
+  maturityDate String
+  currentValue Float
+  issuer       String?
+  user         User    @relation(fields: [userId], references: [id])
 }
 
 model PlaidItem {

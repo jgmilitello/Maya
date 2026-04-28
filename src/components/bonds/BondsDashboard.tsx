@@ -1,26 +1,89 @@
 'use client'
 
-import { mockBonds, BONDS_TOTAL_INVESTED, BONDS_TOTAL_VALUE, BONDS_AVG_YIELD } from '@/src/lib/mock-data'
+import { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 import { ArrowUpRight } from 'lucide-react'
+
+interface UserBond {
+  id: string
+  name: string
+  type: string
+  faceValue: number
+  couponRate: number
+  maturityDate: string
+  currentValue: number
+  issuer: string | null
+}
 
 function fmt(n: number) {
   return `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
-const TYPE_CONFIG = {
-  treasury: { label: 'Treasury', color: '#10B981', bg: 'bg-emerald-50', text: 'text-emerald-600', icon: '🏛️' },
-  corporate: { label: 'Corporate', color: '#E91E8C', bg: 'bg-pink-50', text: 'text-pink-600', icon: '🏢' },
-  municipal: { label: 'Municipal', color: '#7C3AED', bg: 'bg-purple-50', text: 'text-purple-600', icon: '🏙️' },
+const TYPE_CONFIG: Record<string, { label: string; color: string; bg: string; text: string; icon: string }> = {
+  treasury:  { label: 'Treasury',  color: '#10B981', bg: 'bg-emerald-50', text: 'text-emerald-600', icon: '🏛️' },
+  corporate: { label: 'Corporate', color: '#E91E8C', bg: 'bg-pink-50',    text: 'text-pink-600',    icon: '🏢' },
+  municipal: { label: 'Municipal', color: '#7C3AED', bg: 'bg-purple-50',  text: 'text-purple-600',  icon: '🏙️' },
+}
+
+function getTypeConfig(type: string) {
+  return TYPE_CONFIG[type] ?? { label: type, color: '#9CA3AF', bg: 'bg-gray-50', text: 'text-gray-600', icon: '📄' }
 }
 
 export function BondsDashboard() {
-  const totalGain = BONDS_TOTAL_VALUE - BONDS_TOTAL_INVESTED
-  const totalGainPct = (totalGain / BONDS_TOTAL_INVESTED) * 100
+  const [bonds, setBonds] = useState<UserBond[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const chartData = mockBonds.map(b => ({
+  useEffect(() => {
+    fetch('/api/user/bonds')
+      .then(r => r.json())
+      .then(data => {
+        setBonds(data.bonds ?? [])
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[40vh]">
+        <div className="flex gap-1">
+          {[0, 1, 2].map(i => (
+            <div key={i} className="w-2 h-2 rounded-full bg-pink-400 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (bonds.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>
+            Your Bond Portfolio 🏦
+          </h1>
+        </div>
+        <div className="bg-white rounded-2xl p-12 shadow-sm border border-pink-50 flex flex-col items-center text-center gap-3">
+          <span className="text-5xl">🏛️</span>
+          <h2 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>No bonds added yet</h2>
+          <p className="text-gray-500 text-sm max-w-sm" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+            You indicated you don't hold any bonds, or skipped this step during onboarding. You can update your data from Settings.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  // Computed totals
+  const totalInvested = bonds.reduce((s, b) => s + b.faceValue, 0)
+  const totalValue = bonds.reduce((s, b) => s + b.currentValue, 0)
+  const totalGain = totalValue - totalInvested
+  const totalGainPct = totalInvested > 0 ? (totalGain / totalInvested) * 100 : 0
+  const avgYield = bonds.reduce((s, b) => s + b.couponRate, 0) / bonds.length
+
+  const chartData = bonds.map(b => ({
     name: b.name.split(' ')[0],
-    yield: b.yield,
+    yield: b.couponRate,
     fullName: b.name,
     type: b.type,
   }))
@@ -33,27 +96,29 @@ export function BondsDashboard() {
           Your Bond Portfolio 🏦
         </h1>
         <p className="text-gray-500 text-sm mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>
-          Stable, predictable returns from {mockBonds.length} bonds
+          Stable, predictable returns from {bonds.length} bond{bonds.length !== 1 ? 's' : ''}
         </p>
       </div>
 
       {/* Summary cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50">
-          <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Total Invested</p>
-          <p className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(BONDS_TOTAL_INVESTED)}</p>
+          <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Total Face Value</p>
+          <p className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(totalInvested)}</p>
         </div>
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50">
           <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Current Value</p>
-          <p className="text-2xl font-black text-gray-800 mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(BONDS_TOTAL_VALUE)}</p>
-          <div className="flex items-center gap-1 text-emerald-500 text-xs font-semibold">
-            <ArrowUpRight size={12} />
-            +{fmt(totalGain)} ({totalGainPct.toFixed(2)}%)
-          </div>
+          <p className="text-2xl font-black text-gray-800 mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(totalValue)}</p>
+          {totalGain !== 0 && (
+            <div className={`flex items-center gap-1 text-xs font-semibold ${totalGain >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+              <ArrowUpRight size={12} />
+              {totalGain >= 0 ? '+' : ''}{fmt(totalGain)} ({totalGainPct.toFixed(2)}%)
+            </div>
+          )}
         </div>
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-pink-50">
-          <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Average Yield</p>
-          <p className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{BONDS_AVG_YIELD.toFixed(2)}%</p>
+          <p className="text-xs text-gray-400 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Average Coupon Rate</p>
+          <p className="text-2xl font-black text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{avgYield.toFixed(2)}%</p>
           <p className="text-xs text-gray-400 mt-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>Across all bonds</p>
         </div>
       </div>
@@ -61,7 +126,7 @@ export function BondsDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Yield comparison chart */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-pink-50">
-          <h3 className="font-bold text-gray-800 mb-4" style={{ fontFamily: 'Nunito, sans-serif' }}>Yield Comparison</h3>
+          <h3 className="font-bold text-gray-800 mb-4" style={{ fontFamily: 'Nunito, sans-serif' }}>Coupon Rate Comparison</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={chartData} margin={{ top: 5, right: 5, left: 0, bottom: 0 }}>
               <XAxis
@@ -84,11 +149,11 @@ export function BondsDashboard() {
                   borderRadius: '12px',
                   fontSize: '12px',
                 }}
-                formatter={(value) => [`${value}%`, 'Yield']}
+                formatter={(value) => [`${value}%`, 'Coupon Rate']}
               />
               <Bar dataKey="yield" radius={[6, 6, 0, 0]}>
                 {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={TYPE_CONFIG[entry.type as keyof typeof TYPE_CONFIG].color} />
+                  <Cell key={`cell-${index}`} fill={getTypeConfig(entry.type).color} />
                 ))}
               </Bar>
             </BarChart>
@@ -110,8 +175,8 @@ export function BondsDashboard() {
             <h3 className="font-bold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>Holdings</h3>
           </div>
           <div className="divide-y divide-pink-50">
-            {mockBonds.map(bond => {
-              const cfg = TYPE_CONFIG[bond.type]
+            {bonds.map(bond => {
+              const cfg = getTypeConfig(bond.type)
               const gain = bond.currentValue - bond.faceValue
               return (
                 <div key={bond.id} className="px-6 py-4 hover:bg-pink-50/30 transition-colors">
@@ -122,12 +187,12 @@ export function BondsDashboard() {
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-gray-800" style={{ fontFamily: 'Nunito, sans-serif' }}>{bond.name}</p>
-                        <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>{bond.issuer}</p>
+                        <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>{bond.issuer ?? cfg.label}</p>
                       </div>
                     </div>
                     <span className={`text-xs px-2 py-1 rounded-full font-semibold ${cfg.bg} ${cfg.text}`}>{cfg.label}</span>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 mt-3 pl-13">
+                  <div className="grid grid-cols-3 gap-2 mt-3">
                     <div>
                       <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Face Value</p>
                       <p className="text-sm font-bold text-gray-700" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(bond.faceValue)}</p>
@@ -137,12 +202,8 @@ export function BondsDashboard() {
                       <p className="text-sm font-bold text-gray-700" style={{ fontFamily: 'Nunito, sans-serif' }}>{bond.couponRate}%</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Yield</p>
-                      <p className={`text-sm font-bold ${cfg.text}`} style={{ fontFamily: 'Nunito, sans-serif' }}>{bond.yield}%</p>
-                    </div>
-                    <div>
                       <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Current Value</p>
-                      <p className="text-sm font-bold text-gray-700" style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(bond.currentValue)}</p>
+                      <p className={`text-sm font-bold ${cfg.text}`} style={{ fontFamily: 'Nunito, sans-serif' }}>{fmt(bond.currentValue)}</p>
                     </div>
                     <div>
                       <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Gain/Loss</p>
@@ -154,6 +215,12 @@ export function BondsDashboard() {
                       <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Matures</p>
                       <p className="text-sm font-bold text-gray-700" style={{ fontFamily: 'Nunito, sans-serif' }}>
                         {new Date(bond.maturityDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-400" style={{ fontFamily: 'DM Sans, sans-serif' }}>Issuer</p>
+                      <p className="text-sm font-bold text-gray-700 truncate" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                        {bond.issuer ?? '—'}
                       </p>
                     </div>
                   </div>
