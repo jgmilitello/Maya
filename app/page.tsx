@@ -94,7 +94,7 @@ export default function LandingPage() {
           </button>
 
           <button
-            onClick={() => signIn('demo', { callbackUrl: '/dashboard' })}
+            onClick={() => signIn('demo', { callbackUrl: '/demo-start' })}
             className="flex items-center gap-3 px-8 py-4 rounded-full font-bold text-lg border-2 border-pink-300 text-pink-600 hover:bg-pink-50 transition-all hover:scale-105"
             style={{ fontFamily: 'Nunito, sans-serif' }}
           >
@@ -104,7 +104,7 @@ export default function LandingPage() {
         </div>
 
         <p className="text-sm text-gray-400 mt-4" style={{ fontFamily: 'DM Sans, sans-serif' }}>
-          Demo mode uses sample data — no account needed
+          No account needed — we&apos;ll walk you through everything ✨
         </p>
       </section>
 

@@ -8,7 +8,6 @@ import {
   CreditCard,
   Landmark,
   PiggyBank,
-  Settings,
   Sparkles,
 } from 'lucide-react'
 
@@ -18,7 +17,6 @@ const navItems = [
   { href: '/credit-cards', label: 'Credit Cards', icon: CreditCard },
   { href: '/bonds', label: 'Bonds', icon: Landmark },
   { href: '/budgeting', label: 'Budgeting', icon: PiggyBank },
-  { href: '/settings', label: 'Settings', icon: Settings },
 ]
 
 export function Sidebar() {
@@ -28,15 +26,15 @@ export function Sidebar() {
     <>
       {/* Desktop sidebar */}
       <aside className="hidden md:flex flex-col w-64 min-h-screen bg-white border-r border-pink-100 shadow-sm">
-        {/* Logo */}
-        <div className="flex items-center gap-2 px-6 py-6 border-b border-pink-100">
+        {/* Logo — click goes back to home */}
+        <Link href="/" className="flex items-center gap-2 px-6 py-6 border-b border-pink-100 hover:opacity-80 transition-opacity">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #E91E8C, #7C3AED)' }}>
             <Sparkles size={18} className="text-white" />
           </div>
           <span className="text-xl font-black" style={{ fontFamily: 'Nunito, sans-serif', background: 'linear-gradient(135deg, #E91E8C, #7C3AED)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             Mayas
           </span>
-        </div>
+        </Link>
 
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 space-y-1">
